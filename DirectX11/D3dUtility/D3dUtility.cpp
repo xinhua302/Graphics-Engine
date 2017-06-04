@@ -18,7 +18,9 @@ ID3D11VertexShader*     g_pVertexShader = nullptr;
 ID3D11PixelShader*      g_pPixelShader = nullptr;
 //输入布局
 ID3D11InputLayout*      g_pVertexLayout = nullptr;
+//顶点缓存
 ID3D11Buffer*           g_pVertexBuffer = nullptr;
+
 
 HRESULT InitDevice(HWND hwnd)
 {
@@ -190,7 +192,11 @@ HRESULT InitDevice(HWND hwnd)
 	InitData.pSysMem = vertices;
 	hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
 	if (FAILED(hr))
+	{
+		::MessageBox(0, L"CreateBuffer - FAILED", 0, 0);
 		return hr;
+	}
+		
 
 	//设置顶点缓存
 	UINT stride = sizeof(XMFLOAT3);
@@ -201,8 +207,7 @@ HRESULT InitDevice(HWND hwnd)
 	g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	return S_OK;
-
-		
+	
 }
 
 HRESULT CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
@@ -249,9 +254,9 @@ void Render()
 	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
 	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
 
-	//画三角形
-	g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
-	g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
+	//绘制
+	g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
+	g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
 	g_pImmediateContext->Draw(3, 0);
 
 	//显示
