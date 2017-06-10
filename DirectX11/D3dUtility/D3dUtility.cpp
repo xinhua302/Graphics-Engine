@@ -20,6 +20,31 @@ ID3D11PixelShader*      g_pPixelShader = nullptr;
 ID3D11InputLayout*      g_pVertexLayout = nullptr;
 //顶点缓存
 ID3D11Buffer*           g_pVertexBuffer = nullptr;
+//顶点索引缓存
+ID3D11Buffer*			g_pIndexBuffer = nullptr;
+//常量缓存
+ID3D11Buffer*			g_pConstantBuffer = nullptr;
+//世界变换
+XMMATRIX                g_World;
+//相机变换
+XMMATRIX                g_View;
+//投影变换
+XMMATRIX                g_Projection;
+
+//定义顶点
+struct SimpleVertex
+{
+	XMFLOAT3 Pos;
+	XMFLOAT4 Color;
+};
+
+//定义常量缓存
+struct ConstantBuffer
+{
+	XMMATRIX mWorld;
+	XMMATRIX mView;
+	XMMATRIX mProjection;
+};
 
 
 HRESULT InitDevice(HWND hwnd)
@@ -83,7 +108,7 @@ HRESULT InitDevice(HWND hwnd)
 		::MessageBox(0, L"D3D11CreateDeviceAndSwapChain() - FAILED", 0, 0);
 		return hr;
 	}
-	
+
 	//创建后台缓存
 	ID3D11Texture2D* pBackBuffer = nullptr;
 	hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
@@ -138,6 +163,7 @@ HRESULT InitDevice(HWND hwnd)
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT numElements = ARRAYSIZE(layout);
 
@@ -150,7 +176,7 @@ HRESULT InitDevice(HWND hwnd)
 		::MessageBox(0, L"CreateInputLayout - FAILED", 0, 0);
 		return hr;
 	}
-		
+
 
 	//启用输入布局
 	g_pImmediateContext->IASetInputLayout(g_pVertexLayout);
@@ -173,18 +199,23 @@ HRESULT InitDevice(HWND hwnd)
 		::MessageBox(0, L"CreatePixelShader - FAILED", 0, 0);
 		return hr;
 	}
-		
+
 	//创建顶点缓存
-	XMFLOAT3 vertices[] =
+	SimpleVertex vertices[] =
 	{
-		XMFLOAT3(0.0f, 0.5f, 0.5f),
-		XMFLOAT3(0.5f, -0.5f, 0.5f),
-		XMFLOAT3(-0.5f, -0.5f, 0.5f),
+		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
+		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
+		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },
 	};
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(XMFLOAT3) * 3;
+	bd.ByteWidth = sizeof(SimpleVertex) * 8;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 	D3D11_SUBRESOURCE_DATA InitData;
@@ -196,16 +227,74 @@ HRESULT InitDevice(HWND hwnd)
 		::MessageBox(0, L"CreateBuffer - FAILED", 0, 0);
 		return hr;
 	}
-		
 
 	//设置顶点缓存
-	UINT stride = sizeof(XMFLOAT3);
+	UINT stride = sizeof(SimpleVertex);
 	UINT offset = 0;
 	g_pImmediateContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
+
+	//创建顶点索引缓存
+	WORD indices[] =
+	{
+		3,1,0,
+		2,1,3,
+
+		0,5,4,
+		1,5,0,
+
+		3,4,7,
+		0,4,3,
+
+		1,6,5,
+		2,6,1,
+
+		2,7,6,
+		3,7,2,
+
+		6,4,5,
+		7,4,6,
+	};
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(WORD) * 36;
+	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	bd.CPUAccessFlags = 0;
+	InitData.pSysMem = indices;
+	hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
+	if (FAILED(hr))
+	{
+		::MessageBox(0, L"g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer) - FAILED", 0, 0);
+		return hr;
+	}
+
+	// 设置顶点索引缓存
+	g_pImmediateContext->IASetIndexBuffer(g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 	//设置拓扑结构
 	g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	//创建常量缓存
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(ConstantBuffer);
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bd.CPUAccessFlags = 0;
+	hr = g_pd3dDevice->CreateBuffer(&bd, nullptr, &g_pConstantBuffer);
+	if (FAILED(hr))
+	{
+		::MessageBox(0, L" g_pd3dDevice->CreateBuffer(&bd, nullptr, &g_pConstantBuffer) - FAILED", 0, 0);
+		return hr;
+	}
+		
+	//单位矩阵
+	g_World = XMMatrixIdentity();
+
+	//相机矩阵
+	XMVECTOR Eye = XMVectorSet(0.0f, 1.0f, -5.0f, 0.0f);
+	XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	g_View = XMMatrixLookAtLH(Eye, At, Up);
+
+	//投影矩阵
+	g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, width / (FLOAT)height, 0.01f, 100.0f);
 	return S_OK;
 	
 }
@@ -248,16 +337,31 @@ void CleanupDevice()
 	if (g_pd3dDevice) g_pd3dDevice->Release();
 }
 
-void Render()
+void Render(float timeDelta)
 {
+	//旋转
+	g_World *= XMMatrixRotationY(timeDelta);
+
 	//清屏
-	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
+	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; 
 	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
 
+	//设置常量缓存中的矩阵
+	ConstantBuffer cb;
+	cb.mWorld = XMMatrixTranspose(g_World);
+	cb.mView = XMMatrixTranspose(g_View);
+	cb.mProjection = XMMatrixTranspose(g_Projection);
+	g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+
 	//绘制
+	//设置顶点着色器
 	g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
+	//设置常量缓冲区
+	g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
+	//设置像素缓冲区
 	g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
-	g_pImmediateContext->Draw(3, 0);
+	//绘制36个顶点共12个三角形
+	g_pImmediateContext->DrawIndexed(36, 0, 0);
 
 	//显示
 	g_pSwapChain->Present(0, 0);

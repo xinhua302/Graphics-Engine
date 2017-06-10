@@ -14,4 +14,4 @@ HRESULT CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szS
 void CleanupDevice();
 
 //‰÷»æ
-void Render();
+void Render(float timeDelta);

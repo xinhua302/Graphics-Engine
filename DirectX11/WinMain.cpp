@@ -114,6 +114,6 @@ int EnterMsgLoop(bool(*ptr_display)(float timeDelta))
 
 bool DisPlay(float timeDelta)
 {
-	Render();
+	Render(timeDelta);
 	return true;
 }
