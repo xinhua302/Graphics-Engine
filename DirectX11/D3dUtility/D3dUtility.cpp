@@ -12,6 +12,10 @@ ID3D11DeviceContext*    g_pImmediateContext = nullptr;
 IDXGISwapChain*         g_pSwapChain = nullptr;
 //渲染目标视图
 ID3D11RenderTargetView* g_pRenderTargetView = nullptr;
+
+ID3D11Texture2D*        g_pDepthStencil = nullptr;
+
+ID3D11DepthStencilView* g_pDepthStencilView = nullptr;
 //顶点着色
 ID3D11VertexShader*     g_pVertexShader = nullptr;
 //像素着色
@@ -23,27 +27,43 @@ ID3D11Buffer*           g_pVertexBuffer = nullptr;
 //顶点索引缓存
 ID3D11Buffer*			g_pIndexBuffer = nullptr;
 //常量缓存
-ID3D11Buffer*			g_pConstantBuffer = nullptr;
+ID3D11Buffer*                       g_pCBNeverChanges = nullptr;
+ID3D11Buffer*                       g_pCBChangeOnResize = nullptr;
+ID3D11Buffer*                       g_pCBChangesEveryFrame = nullptr;
+//着色器资源视图，保存纹理贴图
+ID3D11ShaderResourceView*           g_pTextureRV = nullptr;
+//采样状态
+ID3D11SamplerState*                 g_pSamplerLinear = nullptr;
 //世界变换
 XMMATRIX                g_World;
 //相机变换
 XMMATRIX                g_View;
 //投影变换
 XMMATRIX                g_Projection;
+XMFLOAT4                            g_vMeshColor(0.7f, 0.7f, 0.7f, 1.0f);
 
 //定义顶点
 struct SimpleVertex
 {
 	XMFLOAT3 Pos;
-	XMFLOAT4 Color;
+	XMFLOAT2 Tex;
 };
 
 //定义常量缓存
-struct ConstantBuffer
+struct CBNeverChanges
+{
+	XMMATRIX mView;
+};
+
+struct CBChangeOnResize
+{
+	XMMATRIX mProjection;
+};
+
+struct CBChangesEveryFrame
 {
 	XMMATRIX mWorld;
-	XMMATRIX mView;
-	XMMATRIX mProjection;
+	XMFLOAT4 vMeshColor;
 };
 
 
@@ -127,8 +147,44 @@ HRESULT InitDevice(HWND hwnd)
 		return hr;
 	}
 
+
+	//创建深度缓存贴图
+	D3D11_TEXTURE2D_DESC descDepth;
+	ZeroMemory(&descDepth, sizeof(descDepth));
+	descDepth.Width = width;
+	descDepth.Height = height;
+	descDepth.MipLevels = 1;
+	descDepth.ArraySize = 1;
+	descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	descDepth.SampleDesc.Count = 1;
+	descDepth.SampleDesc.Quality = 0;
+	descDepth.Usage = D3D11_USAGE_DEFAULT;
+	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	descDepth.CPUAccessFlags = 0;
+	descDepth.MiscFlags = 0;
+	hr = g_pd3dDevice->CreateTexture2D(&descDepth, NULL, &g_pDepthStencil);
+	if (FAILED(hr))
+	{
+		::MessageBox(0, L"g_pd3dDevice->CreateTexture2D(&descDepth, NULL, &g_pDepthStencil) - FAILED", 0, 0);
+		return hr;
+	}
+		
+
+	//创建深度缓存视图
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+	ZeroMemory(&descDSV, sizeof(descDSV));
+	descDSV.Format = descDepth.Format;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	descDSV.Texture2D.MipSlice = 0;
+	hr = g_pd3dDevice->CreateDepthStencilView(g_pDepthStencil, &descDSV, &g_pDepthStencilView);
+	if (FAILED(hr))
+	{
+		::MessageBox(0, L"CreateDepthStencilView - FAILED", 0, 0);
+		return hr;
+	}		
+
 	//绑定一个或多个渲染目标自动深度模具缓冲区的输出合并阶段
-	g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, nullptr);
+	g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
 
 	//设置视口
 	D3D11_VIEWPORT vp;
@@ -163,7 +219,7 @@ HRESULT InitDevice(HWND hwnd)
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT numElements = ARRAYSIZE(layout);
 
@@ -203,19 +259,40 @@ HRESULT InitDevice(HWND hwnd)
 	//创建顶点缓存
 	SimpleVertex vertices[] =
 	{
-		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
+		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+
+		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
+		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+
+		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
+		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
+		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
+		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+
+		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+
+		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
+		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(0.0f, 1.0f) },
+
+		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(1.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
+		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
 	};
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(SimpleVertex) * 8;
+	bd.ByteWidth = sizeof(SimpleVertex) * 24;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 	D3D11_SUBRESOURCE_DATA InitData;
@@ -239,20 +316,20 @@ HRESULT InitDevice(HWND hwnd)
 		3,1,0,
 		2,1,3,
 
-		0,5,4,
-		1,5,0,
-
-		3,4,7,
-		0,4,3,
-
-		1,6,5,
-		2,6,1,
-
-		2,7,6,
-		3,7,2,
-
 		6,4,5,
 		7,4,6,
+
+		11,9,8,
+		10,9,11,
+
+		14,12,13,
+		15,12,14,
+
+		19,17,16,
+		18,17,19,
+
+		22,20,21,
+		23,20,22,
 	};
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.ByteWidth = sizeof(WORD) * 36;
@@ -274,27 +351,62 @@ HRESULT InitDevice(HWND hwnd)
 
 	//创建常量缓存
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(ConstantBuffer);
+	bd.ByteWidth = sizeof(CBNeverChanges);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd.CPUAccessFlags = 0;
-	hr = g_pd3dDevice->CreateBuffer(&bd, nullptr, &g_pConstantBuffer);
+	hr = g_pd3dDevice->CreateBuffer(&bd, nullptr, &g_pCBNeverChanges);
 	if (FAILED(hr))
 	{
 		::MessageBox(0, L" g_pd3dDevice->CreateBuffer(&bd, nullptr, &g_pConstantBuffer) - FAILED", 0, 0);
 		return hr;
 	}
+
+	bd.ByteWidth = sizeof(CBChangeOnResize);
+	hr = g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangeOnResize);
+	if (FAILED(hr))
+		return hr;
+
+	bd.ByteWidth = sizeof(CBChangesEveryFrame);
+	hr = g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangesEveryFrame);
+	if (FAILED(hr))
+		return hr;
+
+	//载入纹理图
+	hr = D3DX11CreateShaderResourceViewFromFile(g_pd3dDevice, L"Resource/seafloor.dds", NULL, NULL, &g_pTextureRV, NULL);
+	if (FAILED(hr))
+		return hr;
+
+	//创建采样状态
+	D3D11_SAMPLER_DESC sampDesc;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	hr = g_pd3dDevice->CreateSamplerState(&sampDesc, &g_pSamplerLinear);
+	if (FAILED(hr))
+		return hr;
 		
 	//单位矩阵
 	g_World = XMMatrixIdentity();
 
 	//相机矩阵
-	XMVECTOR Eye = XMVectorSet(0.0f, 1.0f, -5.0f, 0.0f);
+	XMVECTOR Eye = XMVectorSet(0.0f, 4.0f, -10.0f, 0.0f);
 	XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	g_View = XMMatrixLookAtLH(Eye, At, Up);
+	CBNeverChanges cbNeverChanges;
+	cbNeverChanges.mView = XMMatrixTranspose(g_View);
+	g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0);
 
 	//投影矩阵
-	g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, width / (FLOAT)height, 0.01f, 100.0f);
+	g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
+	CBChangeOnResize cbChangesOnResize;
+	cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
+	g_pImmediateContext->UpdateSubresource(g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0);
 	return S_OK;
 	
 }
@@ -339,28 +451,37 @@ void CleanupDevice()
 
 void Render(float timeDelta)
 {
-	//旋转
+	static float t = 0.0f;
+	t += timeDelta;
 	g_World *= XMMatrixRotationY(timeDelta);
 
+	//光照
+	g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
+	g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
+	g_vMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+
 	//清屏
-	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; 
+	float ClearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f }; 
 	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
+	//清除深度缓存
+	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
 
 	//设置常量缓存中的矩阵
-	ConstantBuffer cb;
+	CBChangesEveryFrame cb;
 	cb.mWorld = XMMatrixTranspose(g_World);
-	cb.mView = XMMatrixTranspose(g_View);
-	cb.mProjection = XMMatrixTranspose(g_Projection);
-	g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+	cb.vMeshColor = g_vMeshColor;
+	g_pImmediateContext->UpdateSubresource(g_pCBChangesEveryFrame, 0, NULL, &cb, 0, 0);
 
-	//绘制
 	//设置顶点着色器
-	g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
-	//设置常量缓冲区
-	g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
-	//设置像素缓冲区
-	g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
-	//绘制36个顶点共12个三角形
+	g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
+	g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pCBNeverChanges);
+	g_pImmediateContext->VSSetConstantBuffers(1, 1, &g_pCBChangeOnResize);
+	g_pImmediateContext->VSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
+	g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
+	g_pImmediateContext->PSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
+	g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTextureRV);
+	g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
 	g_pImmediateContext->DrawIndexed(36, 0, 0);
 
 	//显示
