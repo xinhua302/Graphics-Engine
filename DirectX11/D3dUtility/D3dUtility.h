@@ -1,17 +1,24 @@
-#include <windows.h>
-#include <d3d11.h>
-#include <D3DX11.h>
-#include <d3dcompiler.h>
-#include <xnamath.h>
+#include <d3dx11.h>
+#include <dxerr.h>
 
-//初始化设备
-HRESULT InitDevice(HWND hwnd);
+#if defined(DEBUG) | defined(_DEBUG)
+#ifndef HR
+#define HR(x)                                              \
+	{                                                          \
+	HRESULT hr = (x);                                      \
+if (FAILED(hr))                                         \
+		{                                                      \
+		DXTrace(__FILE__, (DWORD)__LINE__, hr, L#x, true); \
+		}                                                      \
+	}
+#endif
 
-//编译着色器语言
-HRESULT CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
+#else
+#ifndef HR
+#define HR(x) (x)
+#endif
+#endif 
 
-//清除设备
-void CleanupDevice();
+#define ReleaseCOM(x) { if(x){ x->Release(); x = 0; } }
 
-//渲染
-void Render(float timeDelta);
+#define SafeDelete(x) { delete x; x = 0; }

@@ -16,6 +16,4 @@ int EnterMsgLoop(bool(*ptr_display)(float timeDelta));
 //≥ı ºªØWindows
 bool InitWindow(HINSTANCE hInstance, int width, int height);
 
-//œ‘ æ
-bool DisPlay(float timeDelta);
 #endif // __WinMain_h

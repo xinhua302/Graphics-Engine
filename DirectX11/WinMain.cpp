@@ -1,5 +1,5 @@
 #include "WinMain.h"
-#include "D3dUtility/D3dUtility.h"
+#include "D3dApp.h"
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -16,15 +16,15 @@ int WINAPI WinMain(HINSTANCE hinstance,
 		MessageBox(0, L"InitWindow Failed", 0, 0);
 		return 0;
 	}
-
-	if (FAILED(InitDevice(g_hWnd)))
+	
+	if (!D3dApp::Init(g_hWnd))
 	{
-		MessageBox(0, L"InitDevice", 0, 0);
+		MessageBox(0, L"Init", 0, 0);
 		return 0;
 	}
-	EnterMsgLoop(DisPlay);
 
-	CleanupDevice();
+	EnterMsgLoop(&D3dApp::Update);
+
 	return 1;
 }
 
@@ -112,8 +112,3 @@ int EnterMsgLoop(bool(*ptr_display)(float timeDelta))
 	return msg.wParam;
 }
 
-bool DisPlay(float timeDelta)
-{
-	Render(timeDelta);
-	return true;
-}
