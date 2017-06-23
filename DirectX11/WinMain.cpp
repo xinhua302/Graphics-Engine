@@ -17,13 +17,13 @@ int WINAPI WinMain(HINSTANCE hinstance,
 		return 0;
 	}
 	
-	if (!D3dApp::Init(g_hWnd))
+	if (!D3dApp::Init(g_hWnd, SCREEN_WIDTH, SCREEN_HEIGHT))
 	{
 		MessageBox(0, L"Init", 0, 0);
 		return 0;
 	}
 
-	EnterMsgLoop(&D3dApp::Update);
+	EnterMsgLoop(&D3dApp::Run);
 
 	return 1;
 }

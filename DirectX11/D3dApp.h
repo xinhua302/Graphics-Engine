@@ -4,15 +4,16 @@ class D3dApp
 {
 public:
 	static D3dApp* GetInstance();
-	virtual ~D3dApp();
 
-	static bool Init(HWND hwnd);
-	static bool Update(float dt);
-	static bool Render();
-	static void Clear();
+	static bool Init(HWND hwnd, int width, int height);
+	static bool Run(float dt);
 
 public:
-	bool InitDevice();
+	virtual ~D3dApp();
+	bool InitDevice(int width, int height);
+	bool Update(float dt);
+	bool Render();
+	void Clear();
 private:
 	static D3dApp *m_pInstance;
 	D3dApp(HWND hwnd);

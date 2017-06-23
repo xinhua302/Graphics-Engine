@@ -1,6 +1,7 @@
 #include "D3dApp.h"
 
 #define D3d D3dApp::GetInstance()
+D3dApp * D3dApp::m_pInstance = nullptr;
 
 D3dApp::D3dApp(HWND hwnd)
 :				m_DriverType(D3D_DRIVER_TYPE_HARDWARE),
@@ -14,7 +15,7 @@ D3dApp::~D3dApp()
 	Clear();
 }
 
-bool D3dApp::Init(HWND hwnd)
+bool D3dApp::Init(HWND hwnd, int width, int height)
 {
 	if (m_pInstance == nullptr)
 	{
@@ -26,7 +27,7 @@ bool D3dApp::Init(HWND hwnd)
 		return false;
 	}
 
-	if (!D3d->InitDevice())
+	if (!D3d->InitDevice(width, height))
 	{
 		return false;
 	}
@@ -34,21 +35,12 @@ bool D3dApp::Init(HWND hwnd)
 	return true;
 }
 
-bool D3dApp::Update(float dt)
+bool D3dApp::Run(float dt)
 {
 
-	Render();
+	D3d->Update(dt);
+	D3d->Render();
 	return true;
-}
-
-bool D3dApp::Render()
-{
-	return true;
-}
-
-void D3dApp::Clear()
-{
-
 }
 
 D3dApp* D3dApp::GetInstance()
@@ -56,8 +48,11 @@ D3dApp* D3dApp::GetInstance()
 	return m_pInstance;
 }
 
-bool D3dApp::InitDevice()
+bool D3dApp::InitDevice(int width, int height)
 {
+	m_Width = width;
+	m_Height = height;
+
 	UINT createDeviceFlags = 0;
 #if defined(DEBUG) || defined(_DEBUG)  
 	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
@@ -65,11 +60,11 @@ bool D3dApp::InitDevice()
 
 	D3D_FEATURE_LEVEL featureLevel;
 	HRESULT hr = D3D11CreateDevice(
-		0,                 // default adapter
+		0,                 
 		m_DriverType,
-		0,                 // no software device
+		0,                 
 		createDeviceFlags,
-		0, 0,              // default feature level array
+		0, 0,              
 		D3D11_SDK_VERSION,
 		&m_pd3dDevice,
 		&featureLevel,
@@ -88,8 +83,8 @@ bool D3dApp::InitDevice()
 	}
 
 	DXGI_SWAP_CHAIN_DESC sd;
-	sd.BufferDesc.Width = 800;
-	sd.BufferDesc.Height = 600;
+	sd.BufferDesc.Width = m_Width;
+	sd.BufferDesc.Height = m_Height;
 	sd.BufferDesc.RefreshRate.Numerator = 60;
 	sd.BufferDesc.RefreshRate.Denominator = 1;
 	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -122,4 +117,17 @@ bool D3dApp::InitDevice()
 	return true;
 }
 
-D3dApp * D3dApp::m_pInstance = nullptr;
+bool D3dApp::Update(float dt)
+{
+	return true;
+}
+
+bool D3dApp::Render()
+{
+	return true;
+}
+
+void D3dApp::Clear()
+{
+
+}
