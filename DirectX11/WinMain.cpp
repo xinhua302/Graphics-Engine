@@ -1,5 +1,5 @@
 #include "WinMain.h"
-#include "D3dApp.h"
+#include "D3dUtility/D3dApp.h"
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -24,6 +24,8 @@ int WINAPI WinMain(HINSTANCE hinstance,
 	}
 
 	EnterMsgLoop(&D3dApp::Run);
+
+    delete D3d;
 
 	return 1;
 }

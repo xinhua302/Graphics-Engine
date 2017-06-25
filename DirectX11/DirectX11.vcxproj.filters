@@ -5,7 +5,16 @@
     <ClCompile Include="D3dUtility\D3dUtility.cpp">
       <Filter>D3dUtility</Filter>
     </ClCompile>
-    <ClCompile Include="D3dApp.cpp">
+    <ClCompile Include="D3dUtility\D3dApp.cpp">
+      <Filter>D3dUtility</Filter>
+    </ClCompile>
+    <ClCompile Include="D3dUtility\Effect.cpp">
+      <Filter>D3dUtility</Filter>
+    </ClCompile>
+    <ClCompile Include="D3dUtility\Vertex.cpp">
+      <Filter>D3dUtility</Filter>
+    </ClCompile>
+    <ClCompile Include="D3dUtility\LightHelper.cpp">
       <Filter>D3dUtility</Filter>
     </ClCompile>
   </ItemGroup>
@@ -16,19 +25,48 @@
     <Filter Include="Resource">
       <UniqueIdentifier>{83ff8647-fb84-4b87-855e-12f5d9fcf394}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource\FX">
+      <UniqueIdentifier>{4edf3046-dced-48ea-9729-8a1c2e4d82d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Model">
+      <UniqueIdentifier>{6193a094-a50f-4921-a331-3256562cc27e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3dUtility\D3dUtility.h">
       <Filter>D3dUtility</Filter>
     </ClInclude>
     <ClInclude Include="WinMain.h" />
-    <ClInclude Include="D3dApp.h">
+    <ClInclude Include="D3dUtility\D3dApp.h">
+      <Filter>D3dUtility</Filter>
+    </ClInclude>
+    <ClInclude Include="D3dUtility\Effect.h">
+      <Filter>D3dUtility</Filter>
+    </ClInclude>
+    <ClInclude Include="D3dUtility\Vertex.h">
+      <Filter>D3dUtility</Filter>
+    </ClInclude>
+    <ClInclude Include="D3dUtility\LightHelper.h">
+      <Filter>D3dUtility</Filter>
+    </ClInclude>
+    <ClInclude Include="D3dUtility\MathHelper.h">
       <Filter>D3dUtility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resource\Tutorial02.fx">
-      <Filter>Resource</Filter>
-    </FxCompile>
+    <Text Include="Resource\Models\car.txt">
+      <Filter>Resource\Model</Filter>
+    </Text>
+    <Text Include="Resource\Models\skull.txt">
+      <Filter>Resource\Model</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Resource\FX\Basic.fx">
+      <Filter>Resource\FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Resource\FX\LightHelper.fx">
+      <Filter>Resource\FX</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>
