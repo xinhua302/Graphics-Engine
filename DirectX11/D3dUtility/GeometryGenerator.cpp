@@ -15,10 +15,10 @@ void GeometryGenerator::CreateGrid(MeshData &meshData, float width, float depth,
 	float du = 1.0f / static_cast<float>(wVertexCount - 1);
 	float dv = 1.0f / static_cast<float>(dVertexCount - 1);
 
-	for (int i = 0; i < dVertexCount; i++)
+    for (UINT i = 0; i < dVertexCount; i++)
 	{
 		float z = offsetZ + i * dz;
-		for (int j = 0; j < wVertexCount; j++)
+        for (UINT j = 0; j < wVertexCount; j++)
 		{
 			meshData.Vertices[i * wVertexCount + j].Position = XMFLOAT3(offsetX + j * dw, 0.0f, z);
 			meshData.Vertices[i * wVertexCount + j].Normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
@@ -30,9 +30,9 @@ void GeometryGenerator::CreateGrid(MeshData &meshData, float width, float depth,
 	meshData.Indices.resize(triangleCount * 3);
 
 	int index = 0;
-	for (int i = 0; i < dVertexCount - 1; i++)
+	for (UINT i = 0; i < dVertexCount - 1; i++)
 	{
-		for (int j = 0; j < wVertexCount-1; j++)
+        for (UINT j = 0; j < wVertexCount - 1; j++)
 		{
 			meshData.Indices[index] = (i + 1) * wVertexCount + j;
 			meshData.Indices[index + 1] = i * wVertexCount + j + 1;

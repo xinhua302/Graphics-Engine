@@ -20,6 +20,21 @@
     <ClCompile Include="D3dUtility\GeometryGenerator.cpp">
       <Filter>D3dUtility</Filter>
     </ClCompile>
+    <ClCompile Include="D3dUtility\RenderStates.cpp">
+      <Filter>D3dUtility</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager\BaseObject.cpp">
+      <Filter>ObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager\Land.cpp">
+      <Filter>ObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager\Box.cpp">
+      <Filter>ObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="D3dUtility\MathHelper.cpp">
+      <Filter>D3dUtility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="D3dUtility">
@@ -33,6 +48,9 @@
     </Filter>
     <Filter Include="Resource\Model">
       <UniqueIdentifier>{6193a094-a50f-4921-a331-3256562cc27e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ObjectManager">
+      <UniqueIdentifier>{877a17ab-ad46-4579-b074-ac4eb8fe345c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +75,18 @@
     </ClInclude>
     <ClInclude Include="D3dUtility\GeometryGenerator.h">
       <Filter>D3dUtility</Filter>
+    </ClInclude>
+    <ClInclude Include="D3dUtility\RenderStates.h">
+      <Filter>D3dUtility</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager\BaseObject.h">
+      <Filter>ObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager\Land.h">
+      <Filter>ObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager\Box.h">
+      <Filter>ObjectManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
