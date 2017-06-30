@@ -60,5 +60,12 @@ private:
     XMFLOAT4X4 m_BoxWorld;
     XMFLOAT4X4 m_View;
     XMFLOAT4X4 m_Proj;
+
+	//µØÐÎ
+	ID3D11Buffer* m_pLandVB;
+	ID3D11Buffer* m_pLandIB;
+	int m_LandCount;
+
+	ID3D11ShaderResourceView* m_LandeMapSRV;
 };
 #endif

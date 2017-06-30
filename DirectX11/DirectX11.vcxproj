@@ -71,8 +71,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;F:\code\GraphicsEngine\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;F:\code\GraphicsEngine\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;D:\Hx\Code\Graphics-Engine\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;D:\Hx\Code\Graphics-Engine\Lib\x86;$(LibraryPath)</LibraryPath>
     <IntDir>..\Debug\Temp</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -156,6 +156,7 @@
     <ClCompile Include="D3dUtility\D3dApp.cpp" />
     <ClCompile Include="D3dUtility\D3dUtility.cpp" />
     <ClCompile Include="D3dUtility\Effect.cpp" />
+    <ClCompile Include="D3dUtility\GeometryGenerator.cpp" />
     <ClCompile Include="D3dUtility\LightHelper.cpp" />
     <ClCompile Include="D3dUtility\Vertex.cpp" />
     <ClCompile Include="WinMain.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="D3dUtility\D3dApp.h" />
     <ClInclude Include="D3dUtility\D3dUtility.h" />
     <ClInclude Include="D3dUtility\Effect.h" />
+    <ClInclude Include="D3dUtility\GeometryGenerator.h" />
     <ClInclude Include="D3dUtility\LightHelper.h" />
     <ClInclude Include="D3dUtility\MathHelper.h" />
     <ClInclude Include="D3dUtility\Vertex.h" />

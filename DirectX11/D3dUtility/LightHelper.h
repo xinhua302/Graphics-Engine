@@ -9,7 +9,7 @@ struct DirectionalLight
 {
     DirectionalLight() 
     {
-        ZeroMemory(this, sizeof(this)); 
+		ZeroMemory(this, sizeof(DirectionalLight));
     }
 
     XMFLOAT4 Ambient;
@@ -24,7 +24,7 @@ struct PointLight
 {
     PointLight() 
     {
-        ZeroMemory(this, sizeof(this));
+		ZeroMemory(this, sizeof(PointLight));
     }
 
     XMFLOAT4 Ambient;
@@ -43,7 +43,7 @@ struct SpotLight
 {
     SpotLight() 
     {
-        ZeroMemory(this, sizeof(this));
+		ZeroMemory(this, sizeof(SpotLight));
     }
 
     XMFLOAT4 Ambient;
@@ -68,7 +68,7 @@ struct Material
 {
     Material() 
     { 
-        ZeroMemory(this, sizeof(this)); 
+		ZeroMemory(this, sizeof(Material));
     }
 
     XMFLOAT4 Ambient;

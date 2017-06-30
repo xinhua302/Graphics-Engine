@@ -2,6 +2,7 @@
 #include "Effect.h"
 #include "Vertex.h"
 #include "MathHelper.h"
+#include "GeometryGenerator.h"
 #include <cassert>
 
 bool D3dApp::SetRasterizerState()
@@ -222,6 +223,10 @@ bool D3dApp::Init()
     HR(D3DX11CreateShaderResourceViewFromFile(m_pd3dDevice,
         L"Resource/Textures/WoodCrate02.dds", 0, 0, &m_DiffuseMapSRV, 0));
 
+	//载入草地的纹理贴图
+	HR(D3DX11CreateShaderResourceViewFromFile(m_pd3dDevice,
+		L"Resource/Textures/grass.dds", 0, 0, &m_LandeMapSRV, 0));
+
     return true;
 }
 
@@ -240,18 +245,6 @@ bool D3dApp::Render()
     //设置输入布局和拓扑结构
     m_pImmediateContext->IASetInputLayout(InputLayouts::Basic32);
     m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-    //设置顶点和索引
-    UINT stride = sizeof(Vertex::Basic32);
-    UINT offset = 0;
-    m_pImmediateContext->IASetVertexBuffers(0, 1, &m_VB, &stride, &offset);
-    m_pImmediateContext->IASetIndexBuffer(m_IB, DXGI_FORMAT_R32_UINT, 0);
-
-    //变换矩阵
-    XMMATRIX view = XMLoadFloat4x4(&m_View);
-    XMMATRIX proj = XMLoadFloat4x4(&m_Proj);
-    XMMATRIX world = XMLoadFloat4x4(&m_BoxWorld);
-    XMMATRIX worldViewProj = world*view*proj;
 
     //材质
     Material Mat;
@@ -282,14 +275,25 @@ bool D3dApp::Render()
     Effects::FX->SetDirLights(mDirLights);
     Effects::FX->SetEyePosW(mEyePosW);
 
-    XMFLOAT4X4 mTexTransform;
-    XMMATRIX I = XMMatrixIdentity();
-    XMStoreFloat4x4(&mTexTransform, I);
-
     D3DX11_TECHNIQUE_DESC techDesc;
     Effects::FX->Light3TexTech->GetDesc(&techDesc);
     for (UINT p = 0; p < techDesc.Passes; ++p)
     {
+		//设置顶点和索引
+		UINT stride = sizeof(Vertex::Basic32);
+		UINT offset = 0;
+		m_pImmediateContext->IASetVertexBuffers(0, 1, &m_VB, &stride, &offset);
+		m_pImmediateContext->IASetIndexBuffer(m_IB, DXGI_FORMAT_R32_UINT, 0);
+
+		//变换矩阵
+		XMFLOAT4X4 mTexTransform;
+		XMMATRIX I = XMMatrixIdentity();
+		XMStoreFloat4x4(&mTexTransform, I);
+		XMMATRIX view = XMLoadFloat4x4(&m_View);
+		XMMATRIX proj = XMLoadFloat4x4(&m_Proj);
+		XMMATRIX world = XMLoadFloat4x4(&m_BoxWorld);
+		XMMATRIX worldViewProj = world*view*proj;
+
         world = XMLoadFloat4x4(&m_BoxWorld);
         XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
         worldViewProj = world*view*proj;
@@ -302,6 +306,28 @@ bool D3dApp::Render()
         //应用
         Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, m_pImmediateContext);
         m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+		//设置顶点和索引
+		m_pImmediateContext->IASetVertexBuffers(0, 1, &m_pLandVB, &stride, &offset);
+		m_pImmediateContext->IASetIndexBuffer(m_pLandIB, DXGI_FORMAT_R32_UINT, 0);
+
+		XMMATRIX grassTexScale = XMMatrixScaling(10.0f, 10.0f, 0.0f);
+		XMStoreFloat4x4(&mTexTransform, grassTexScale);
+		//变换矩阵
+		view = XMLoadFloat4x4(&m_View);
+		proj = XMLoadFloat4x4(&m_Proj);
+		world = XMMatrixTranslation(0.0f, -1.0f, 0.0f);
+		worldViewProj = world*view*proj;
+		worldInvTranspose = MathHelper::InverseTranspose(world);
+
+		Effects::FX->SetWorld(world);
+		Effects::FX->SetWorldInvTranspose(worldInvTranspose);
+		Effects::FX->SetWorldViewProj(worldViewProj);
+		Effects::FX->SetDiffuseMap(m_LandeMapSRV);
+		Effects::FX->SetTexTransform(XMLoadFloat4x4(&mTexTransform));
+		Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, m_pImmediateContext);
+		m_pImmediateContext->DrawIndexed(m_LandCount, 0, 0);
+
     }
 
     HR(m_pSwapChain->Present(0, 0));
@@ -419,5 +445,49 @@ bool D3dApp::LoadModel()
     D3D11_SUBRESOURCE_DATA iinitData;
     iinitData.pSysMem = &i[0];
     HR(m_pd3dDevice->CreateBuffer(&ibd, &iinitData, &m_IB));
+
+
+	//地形
+	GeometryGenerator::MeshData mesh;
+	GeometryGenerator::CreateGrid(mesh, 10.0f, 10.0f, 10, 10);
+	//地形顶点
+	int landVBCount = mesh.Vertices.size();
+	std::vector<Vertex::Basic32> landVB(landVBCount);
+	for (int i = 0; i < landVBCount; i++)
+	{
+		landVB[i].Pos = mesh.Vertices[i].Position;
+		landVB[i].Normal = mesh.Vertices[i].Normal;
+		landVB[i].Tex = mesh.Vertices[i].TexC;
+	}
+	D3D11_BUFFER_DESC vLandbd;
+	vLandbd.Usage = D3D11_USAGE_IMMUTABLE;
+	vLandbd.ByteWidth = sizeof(Vertex::Basic32) * landVBCount;
+	vLandbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vLandbd.CPUAccessFlags = 0;
+	vLandbd.MiscFlags = 0;
+	D3D11_SUBRESOURCE_DATA vLandInitData;
+	vLandInitData.pSysMem = &landVB[0];
+	HR(m_pd3dDevice->CreateBuffer(&vLandbd, &vLandInitData, &m_pLandVB));
+	
+	//索引
+	int landIBCount = mesh.Indices.size();
+	std::vector<UINT> landIB(landIBCount);
+	for (int i = 0; i < landIBCount; i++)
+	{
+		landIB[i] = mesh.Indices[i];
+	}
+
+	D3D11_BUFFER_DESC iLandbd;
+	iLandbd.Usage = D3D11_USAGE_IMMUTABLE;
+	iLandbd.ByteWidth = sizeof(UINT)* landIBCount;
+	iLandbd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	iLandbd.CPUAccessFlags = 0;
+	iLandbd.MiscFlags = 0;
+	D3D11_SUBRESOURCE_DATA iLandInitData;
+	iLandInitData.pSysMem = &landIB[0];
+	HR(m_pd3dDevice->CreateBuffer(&iLandbd, &iLandInitData, &m_pLandIB));
+	//顶点总数
+	m_LandCount = landIBCount;
+
     return true;
 }

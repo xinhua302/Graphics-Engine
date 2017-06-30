@@ -17,6 +17,9 @@
     <ClCompile Include="D3dUtility\LightHelper.cpp">
       <Filter>D3dUtility</Filter>
     </ClCompile>
+    <ClCompile Include="D3dUtility\GeometryGenerator.cpp">
+      <Filter>D3dUtility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="D3dUtility">
@@ -50,6 +53,9 @@
       <Filter>D3dUtility</Filter>
     </ClInclude>
     <ClInclude Include="D3dUtility\MathHelper.h">
+      <Filter>D3dUtility</Filter>
+    </ClInclude>
+    <ClInclude Include="D3dUtility\GeometryGenerator.h">
       <Filter>D3dUtility</Filter>
     </ClInclude>
   </ItemGroup>
