@@ -1,6 +1,7 @@
 #include "BaseObject.h"
 #include "Land.h"
 #include "Box.h"
+#include "Water.h"
 
 Object::Object(UINT id)
 {
@@ -79,6 +80,10 @@ void ObjectManager::CreateObject(string name)
     else if (name == "Box")
     {
         object = new Box(Id);
+    }
+    else if (name == "Water")
+    {
+        object = new Water(Id);
     }
     ObjectMap.insert(make_pair(Id, object));
     Id++;

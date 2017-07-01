@@ -13,6 +13,7 @@
 #include "Vertex.h"
 #include "RenderStates.h"
 #include "GeometryGenerator.h"
+#include "LightHelper.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
 #ifndef HR

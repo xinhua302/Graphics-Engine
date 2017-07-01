@@ -258,12 +258,12 @@ fxgroup
                 #line 87
                 itof r2.xyzw, l(1, 1, 1, 1)  // r2.x <- texColor.x; r2.y <- texColor.y; r2.z <- texColor.z; r2.w <- texColor.w
                 
-                #line 102
+                #line 103
                 mov r3.xyz, l(0,0,0,0)  // r3.x <- ambient.x; r3.y <- ambient.y; r3.z <- ambient.z
                 mov r4.xyz, l(0,0,0,0)  // r4.x <- diffuse.x; r4.y <- diffuse.y; r4.z <- diffuse.z
                 mov r5.xyz, l(0,0,0,0)  // r5.x <- spec.x; r5.y <- spec.y; r5.z <- spec.z
                 
-                #line 111
+                #line 112
                 nop 
                 mov r6.xyz, cb1[16].xyzx
                 mov r7.xyz, cb1[17].xyzx
@@ -308,22 +308,22 @@ fxgroup
                 movc r0.xyz, r1.wwww, r0.yzwy, r13.xyzx  // r0.x <- diffuse.x; r0.y <- diffuse.y; r0.z <- diffuse.z
                 movc r1.xyz, r1.wwww, r1.xyzx, r14.xyzx
                 
-                #line 111 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
+                #line 112 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
                 mov r6.xyz, r6.xyzx  // r6.x <- A.x; r6.y <- A.y; r6.z <- A.z
                 mov r0.xyz, r0.xyzx  // r0.x <- D.x; r0.y <- D.y; r0.z <- D.z
                 mov r1.xyz, r1.xyzx  // r1.x <- S.x; r1.y <- S.y; r1.z <- S.z
                 
-                #line 114
+                #line 115
                 add r3.xyz, r3.xyzx, r6.xyzx
                 add r0.xyz, r0.xyzx, r4.xyzx  // r0.x <- diffuse.x; r0.y <- diffuse.y; r0.z <- diffuse.z
                 add r1.xyz, r1.xyzx, r5.xyzx  // r1.x <- spec.x; r1.y <- spec.y; r1.z <- spec.z
                 
-                #line 120
+                #line 121
                 add r0.xyz, r0.xyzx, r3.xyzx
                 mul r0.xyz, r0.xyzx, r2.xyzx
                 add r0.xyz, r1.xyzx, r0.xyzx  // r0.x <- litColor.x; r0.y <- litColor.y; r0.z <- litColor.z
                 
-                #line 124
+                #line 125
                 mul r0.w, r2.w, cb1[17].w  // r0.w <- litColor.w
                 mov o0.xyz, r0.xyzx
                 mov o0.w, r0.w
@@ -552,12 +552,12 @@ fxgroup
                 #line 87
                 itof r2.xyzw, l(1, 1, 1, 1)  // r2.x <- texColor.x; r2.y <- texColor.y; r2.z <- texColor.z; r2.w <- texColor.w
                 
-                #line 102
+                #line 103
                 mov r3.xyz, l(0,0,0,0)  // r3.x <- ambient.x; r3.y <- ambient.y; r3.z <- ambient.z
                 mov r4.xyz, l(0,0,0,0)  // r4.x <- diffuse.x; r4.y <- diffuse.y; r4.z <- diffuse.z
                 mov r5.xyz, l(0,0,0,0)  // r5.x <- spec.x; r5.y <- spec.y; r5.z <- spec.z
                 
-                #line 111
+                #line 112
                 nop 
                 mov r6.xyz, cb1[16].xyzx
                 mov r7.xyz, cb1[17].xyzx
@@ -602,17 +602,17 @@ fxgroup
                 movc r7.xyz, r1.wwww, r7.xyzx, r13.xyzx
                 movc r8.xyz, r1.wwww, r8.xyzx, r14.xyzx
                 
-                #line 111 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
+                #line 112 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
                 mov r6.xyz, r6.xyzx  // r6.x <- A.x; r6.y <- A.y; r6.z <- A.z
                 mov r7.xyz, r7.xyzx  // r7.x <- D.x; r7.y <- D.y; r7.z <- D.z
                 mov r8.xyz, r8.xyzx  // r8.x <- S.x; r8.y <- S.y; r8.z <- S.z
                 
-                #line 114
+                #line 115
                 add r3.xyz, r3.xyzx, r6.xyzx
                 add r4.xyz, r4.xyzx, r7.xyzx
                 add r5.xyz, r5.xyzx, r8.xyzx
                 
-                #line 111
+                #line 112
                 nop 
                 mov r6.xyz, cb1[16].xyzx  // r6.x <- mat.Ambient.x; r6.y <- mat.Ambient.y; r6.z <- mat.Ambient.z
                 mov r7.xyz, cb1[17].xyzx  // r7.x <- mat.Diffuse.x; r7.y <- mat.Diffuse.y; r7.z <- mat.Diffuse.z
@@ -655,22 +655,22 @@ fxgroup
                 movc r0.xyz, r1.wwww, r0.yzwy, r13.xyzx  // r0.x <- diffuse.x; r0.y <- diffuse.y; r0.z <- diffuse.z
                 movc r1.xyz, r1.wwww, r1.xyzx, r14.xyzx
                 
-                #line 111 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
+                #line 112 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
                 mov r6.xyz, r6.xyzx  // r6.x <- A.x; r6.y <- A.y; r6.z <- A.z
                 mov r0.xyz, r0.xyzx  // r0.x <- D.x; r0.y <- D.y; r0.z <- D.z
                 mov r1.xyz, r1.xyzx  // r1.x <- S.x; r1.y <- S.y; r1.z <- S.z
                 
-                #line 114
+                #line 115
                 add r3.xyz, r3.xyzx, r6.xyzx
                 add r0.xyz, r0.xyzx, r4.xyzx  // r0.x <- diffuse.x; r0.y <- diffuse.y; r0.z <- diffuse.z
                 add r1.xyz, r1.xyzx, r5.xyzx  // r1.x <- spec.x; r1.y <- spec.y; r1.z <- spec.z
                 
-                #line 120
+                #line 121
                 add r0.xyz, r0.xyzx, r3.xyzx
                 mul r0.xyz, r0.xyzx, r2.xyzx
                 add r0.xyz, r1.xyzx, r0.xyzx  // r0.x <- litColor.x; r0.y <- litColor.y; r0.z <- litColor.z
                 
-                #line 124
+                #line 125
                 mul r0.w, r2.w, cb1[17].w  // r0.w <- litColor.w
                 mov o0.xyz, r0.xyzx
                 mov o0.w, r0.w
@@ -899,12 +899,12 @@ fxgroup
                 #line 87
                 itof r2.xyzw, l(1, 1, 1, 1)  // r2.x <- texColor.x; r2.y <- texColor.y; r2.z <- texColor.z; r2.w <- texColor.w
                 
-                #line 102
+                #line 103
                 mov r3.xyz, l(0,0,0,0)  // r3.x <- ambient.x; r3.y <- ambient.y; r3.z <- ambient.z
                 mov r4.xyz, l(0,0,0,0)  // r4.x <- diffuse.x; r4.y <- diffuse.y; r4.z <- diffuse.z
                 mov r5.xyz, l(0,0,0,0)  // r5.x <- spec.x; r5.y <- spec.y; r5.z <- spec.z
                 
-                #line 111
+                #line 112
                 nop 
                 mov r6.xyz, cb1[16].xyzx
                 mov r7.xyz, cb1[17].xyzx
@@ -949,17 +949,17 @@ fxgroup
                 movc r7.xyz, r1.wwww, r7.xyzx, r13.xyzx
                 movc r8.xyz, r1.wwww, r8.xyzx, r14.xyzx
                 
-                #line 111 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
+                #line 112 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
                 mov r6.xyz, r6.xyzx  // r6.x <- A.x; r6.y <- A.y; r6.z <- A.z
                 mov r7.xyz, r7.xyzx  // r7.x <- D.x; r7.y <- D.y; r7.z <- D.z
                 mov r8.xyz, r8.xyzx  // r8.x <- S.x; r8.y <- S.y; r8.z <- S.z
                 
-                #line 114
+                #line 115
                 add r3.xyz, r3.xyzx, r6.xyzx
                 add r4.xyz, r4.xyzx, r7.xyzx
                 add r5.xyz, r5.xyzx, r8.xyzx
                 
-                #line 111
+                #line 112
                 nop 
                 mov r6.xyz, cb1[16].xyzx  // r6.x <- mat.Ambient.x; r6.y <- mat.Ambient.y; r6.z <- mat.Ambient.z
                 mov r7.xyz, cb1[17].xyzx  // r7.x <- mat.Diffuse.x; r7.y <- mat.Diffuse.y; r7.z <- mat.Diffuse.z
@@ -1002,17 +1002,17 @@ fxgroup
                 movc r7.xyz, r1.wwww, r7.xyzx, r13.xyzx
                 movc r8.xyz, r1.wwww, r8.xyzx, r14.xyzx
                 
-                #line 111 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
+                #line 112 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
                 mov r6.xyz, r6.xyzx  // r6.x <- A.x; r6.y <- A.y; r6.z <- A.z
                 mov r7.xyz, r7.xyzx  // r7.x <- D.x; r7.y <- D.y; r7.z <- D.z
                 mov r8.xyz, r8.xyzx  // r8.x <- S.x; r8.y <- S.y; r8.z <- S.z
                 
-                #line 114
+                #line 115
                 add r3.xyz, r3.xyzx, r6.xyzx
                 add r4.xyz, r4.xyzx, r7.xyzx
                 add r5.xyz, r5.xyzx, r8.xyzx
                 
-                #line 111
+                #line 112
                 nop 
                 mov r6.xyz, cb1[16].xyzx  // r6.x <- mat.Ambient.x; r6.y <- mat.Ambient.y; r6.z <- mat.Ambient.z
                 mov r7.xyz, cb1[17].xyzx  // r7.x <- mat.Diffuse.x; r7.y <- mat.Diffuse.y; r7.z <- mat.Diffuse.z
@@ -1055,22 +1055,22 @@ fxgroup
                 movc r0.xyz, r1.wwww, r0.yzwy, r13.xyzx  // r0.x <- diffuse.x; r0.y <- diffuse.y; r0.z <- diffuse.z
                 movc r1.xyz, r1.wwww, r1.xyzx, r14.xyzx
                 
-                #line 111 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
+                #line 112 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
                 mov r6.xyz, r6.xyzx  // r6.x <- A.x; r6.y <- A.y; r6.z <- A.z
                 mov r0.xyz, r0.xyzx  // r0.x <- D.x; r0.y <- D.y; r0.z <- D.z
                 mov r1.xyz, r1.xyzx  // r1.x <- S.x; r1.y <- S.y; r1.z <- S.z
                 
-                #line 114
+                #line 115
                 add r3.xyz, r3.xyzx, r6.xyzx
                 add r0.xyz, r0.xyzx, r4.xyzx  // r0.x <- diffuse.x; r0.y <- diffuse.y; r0.z <- diffuse.z
                 add r1.xyz, r1.xyzx, r5.xyzx  // r1.x <- spec.x; r1.y <- spec.y; r1.z <- spec.z
                 
-                #line 120
+                #line 121
                 add r0.xyz, r0.xyzx, r3.xyzx
                 mul r0.xyz, r0.xyzx, r2.xyzx
                 add r0.xyz, r1.xyzx, r0.xyzx  // r0.x <- litColor.x; r0.y <- litColor.y; r0.z <- litColor.z
                 
-                #line 124
+                #line 125
                 mul r0.w, r2.w, cb1[17].w  // r0.w <- litColor.w
                 mov o0.xyz, r0.xyzx
                 mov o0.w, r0.w
@@ -1252,7 +1252,7 @@ fxgroup
                 dcl_resource_texture2d (float,float,float,float) t0
                 dcl_input_ps linear v3.xy
                 dcl_output o0.xyzw
-                dcl_temps 1
+                dcl_temps 2
                 //
                 // Initial variable locations:
                 //   v0.x <- pin.PosH.x; v0.y <- pin.PosH.y; v0.z <- pin.PosH.z; v0.w <- pin.PosH.w; 
@@ -1263,16 +1263,21 @@ fxgroup
                 //
                 #line 91 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
                 sample_indexable(texture2d)(float,float,float,float) r0.xyzw, v3.xyxx, t0.xyzw, s0  // r0.x <- texColor.x; r0.y <- texColor.y; r0.z <- texColor.z; r0.w <- texColor.w
+                mov r1.x, l(-0.100000)
+                add r1.x, r0.w, r1.x
+                lt r1.x, r1.x, l(0.000000)
+                and r1.x, r1.x, l(-1)
+                discard_nz r1.x
                 
-                #line 98
+                #line 99
                 mov r0.xyz, r0.xyzx  // r0.x <- litColor.x; r0.y <- litColor.y; r0.z <- litColor.z
                 
-                #line 124
+                #line 125
                 mul r0.w, r0.w, cb0[17].w  // r0.w <- litColor.w
                 mov o0.xyz, r0.xyzx
                 mov o0.w, r0.w
                 ret 
-                // Approximately 6 instruction slots used
+                // Approximately 11 instruction slots used
                             
             };
         }
@@ -1500,13 +1505,18 @@ fxgroup
                 
                 #line 91
                 sample_indexable(texture2d)(float,float,float,float) r2.xyzw, v3.xyxx, t0.xyzw, s0  // r2.x <- texColor.x; r2.y <- texColor.y; r2.z <- texColor.z; r2.w <- texColor.w
+                mov r0.w, l(-0.100000)
+                add r0.w, r0.w, r2.w
+                lt r0.w, r0.w, l(0.000000)
+                and r0.w, r0.w, l(-1)
+                discard_nz r0.w
                 
-                #line 102
+                #line 103
                 mov r3.xyz, l(0,0,0,0)  // r3.x <- ambient.x; r3.y <- ambient.y; r3.z <- ambient.z
                 mov r4.xyz, l(0,0,0,0)  // r4.x <- diffuse.x; r4.y <- diffuse.y; r4.z <- diffuse.z
                 mov r5.xyz, l(0,0,0,0)  // r5.x <- spec.x; r5.y <- spec.y; r5.z <- spec.z
                 
-                #line 111
+                #line 112
                 nop 
                 mov r6.xyz, cb1[16].xyzx
                 mov r7.xyz, cb1[17].xyzx
@@ -1551,27 +1561,27 @@ fxgroup
                 movc r0.xyz, r1.wwww, r0.yzwy, r13.xyzx  // r0.x <- diffuse.x; r0.y <- diffuse.y; r0.z <- diffuse.z
                 movc r1.xyz, r1.wwww, r1.xyzx, r14.xyzx
                 
-                #line 111 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
+                #line 112 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
                 mov r6.xyz, r6.xyzx  // r6.x <- A.x; r6.y <- A.y; r6.z <- A.z
                 mov r0.xyz, r0.xyzx  // r0.x <- D.x; r0.y <- D.y; r0.z <- D.z
                 mov r1.xyz, r1.xyzx  // r1.x <- S.x; r1.y <- S.y; r1.z <- S.z
                 
-                #line 114
+                #line 115
                 add r3.xyz, r3.xyzx, r6.xyzx
                 add r0.xyz, r0.xyzx, r4.xyzx  // r0.x <- diffuse.x; r0.y <- diffuse.y; r0.z <- diffuse.z
                 add r1.xyz, r1.xyzx, r5.xyzx  // r1.x <- spec.x; r1.y <- spec.y; r1.z <- spec.z
                 
-                #line 120
+                #line 121
                 add r0.xyz, r0.xyzx, r3.xyzx
                 mul r0.xyz, r0.xyzx, r2.xyzx
                 add r0.xyz, r1.xyzx, r0.xyzx  // r0.x <- litColor.x; r0.y <- litColor.y; r0.z <- litColor.z
                 
-                #line 124
+                #line 125
                 mul r0.w, r2.w, cb1[17].w  // r0.w <- litColor.w
                 mov o0.xyz, r0.xyzx
                 mov o0.w, r0.w
                 ret 
-                // Approximately 58 instruction slots used
+                // Approximately 63 instruction slots used
                             
             };
         }
@@ -1799,13 +1809,18 @@ fxgroup
                 
                 #line 91
                 sample_indexable(texture2d)(float,float,float,float) r2.xyzw, v3.xyxx, t0.xyzw, s0  // r2.x <- texColor.x; r2.y <- texColor.y; r2.z <- texColor.z; r2.w <- texColor.w
+                mov r0.w, l(-0.100000)
+                add r0.w, r0.w, r2.w
+                lt r0.w, r0.w, l(0.000000)
+                and r0.w, r0.w, l(-1)
+                discard_nz r0.w
                 
-                #line 102
+                #line 103
                 mov r3.xyz, l(0,0,0,0)  // r3.x <- ambient.x; r3.y <- ambient.y; r3.z <- ambient.z
                 mov r4.xyz, l(0,0,0,0)  // r4.x <- diffuse.x; r4.y <- diffuse.y; r4.z <- diffuse.z
                 mov r5.xyz, l(0,0,0,0)  // r5.x <- spec.x; r5.y <- spec.y; r5.z <- spec.z
                 
-                #line 111
+                #line 112
                 nop 
                 mov r6.xyz, cb1[16].xyzx
                 mov r7.xyz, cb1[17].xyzx
@@ -1850,17 +1865,17 @@ fxgroup
                 movc r7.xyz, r1.wwww, r7.xyzx, r13.xyzx
                 movc r8.xyz, r1.wwww, r8.xyzx, r14.xyzx
                 
-                #line 111 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
+                #line 112 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
                 mov r6.xyz, r6.xyzx  // r6.x <- A.x; r6.y <- A.y; r6.z <- A.z
                 mov r7.xyz, r7.xyzx  // r7.x <- D.x; r7.y <- D.y; r7.z <- D.z
                 mov r8.xyz, r8.xyzx  // r8.x <- S.x; r8.y <- S.y; r8.z <- S.z
                 
-                #line 114
+                #line 115
                 add r3.xyz, r3.xyzx, r6.xyzx
                 add r4.xyz, r4.xyzx, r7.xyzx
                 add r5.xyz, r5.xyzx, r8.xyzx
                 
-                #line 111
+                #line 112
                 nop 
                 mov r6.xyz, cb1[16].xyzx  // r6.x <- mat.Ambient.x; r6.y <- mat.Ambient.y; r6.z <- mat.Ambient.z
                 mov r7.xyz, cb1[17].xyzx  // r7.x <- mat.Diffuse.x; r7.y <- mat.Diffuse.y; r7.z <- mat.Diffuse.z
@@ -1903,27 +1918,27 @@ fxgroup
                 movc r0.xyz, r1.wwww, r0.yzwy, r13.xyzx  // r0.x <- diffuse.x; r0.y <- diffuse.y; r0.z <- diffuse.z
                 movc r1.xyz, r1.wwww, r1.xyzx, r14.xyzx
                 
-                #line 111 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
+                #line 112 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
                 mov r6.xyz, r6.xyzx  // r6.x <- A.x; r6.y <- A.y; r6.z <- A.z
                 mov r0.xyz, r0.xyzx  // r0.x <- D.x; r0.y <- D.y; r0.z <- D.z
                 mov r1.xyz, r1.xyzx  // r1.x <- S.x; r1.y <- S.y; r1.z <- S.z
                 
-                #line 114
+                #line 115
                 add r3.xyz, r3.xyzx, r6.xyzx
                 add r0.xyz, r0.xyzx, r4.xyzx  // r0.x <- diffuse.x; r0.y <- diffuse.y; r0.z <- diffuse.z
                 add r1.xyz, r1.xyzx, r5.xyzx  // r1.x <- spec.x; r1.y <- spec.y; r1.z <- spec.z
                 
-                #line 120
+                #line 121
                 add r0.xyz, r0.xyzx, r3.xyzx
                 mul r0.xyz, r0.xyzx, r2.xyzx
                 add r0.xyz, r1.xyzx, r0.xyzx  // r0.x <- litColor.x; r0.y <- litColor.y; r0.z <- litColor.z
                 
-                #line 124
+                #line 125
                 mul r0.w, r2.w, cb1[17].w  // r0.w <- litColor.w
                 mov o0.xyz, r0.xyzx
                 mov o0.w, r0.w
                 ret 
-                // Approximately 95 instruction slots used
+                // Approximately 100 instruction slots used
                             
             };
         }
@@ -2151,13 +2166,18 @@ fxgroup
                 
                 #line 91
                 sample_indexable(texture2d)(float,float,float,float) r2.xyzw, v3.xyxx, t0.xyzw, s0  // r2.x <- texColor.x; r2.y <- texColor.y; r2.z <- texColor.z; r2.w <- texColor.w
+                mov r0.w, l(-0.100000)
+                add r0.w, r0.w, r2.w
+                lt r0.w, r0.w, l(0.000000)
+                and r0.w, r0.w, l(-1)
+                discard_nz r0.w
                 
-                #line 102
+                #line 103
                 mov r3.xyz, l(0,0,0,0)  // r3.x <- ambient.x; r3.y <- ambient.y; r3.z <- ambient.z
                 mov r4.xyz, l(0,0,0,0)  // r4.x <- diffuse.x; r4.y <- diffuse.y; r4.z <- diffuse.z
                 mov r5.xyz, l(0,0,0,0)  // r5.x <- spec.x; r5.y <- spec.y; r5.z <- spec.z
                 
-                #line 111
+                #line 112
                 nop 
                 mov r6.xyz, cb1[16].xyzx
                 mov r7.xyz, cb1[17].xyzx
@@ -2202,17 +2222,17 @@ fxgroup
                 movc r7.xyz, r1.wwww, r7.xyzx, r13.xyzx
                 movc r8.xyz, r1.wwww, r8.xyzx, r14.xyzx
                 
-                #line 111 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
+                #line 112 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
                 mov r6.xyz, r6.xyzx  // r6.x <- A.x; r6.y <- A.y; r6.z <- A.z
                 mov r7.xyz, r7.xyzx  // r7.x <- D.x; r7.y <- D.y; r7.z <- D.z
                 mov r8.xyz, r8.xyzx  // r8.x <- S.x; r8.y <- S.y; r8.z <- S.z
                 
-                #line 114
+                #line 115
                 add r3.xyz, r3.xyzx, r6.xyzx
                 add r4.xyz, r4.xyzx, r7.xyzx
                 add r5.xyz, r5.xyzx, r8.xyzx
                 
-                #line 111
+                #line 112
                 nop 
                 mov r6.xyz, cb1[16].xyzx  // r6.x <- mat.Ambient.x; r6.y <- mat.Ambient.y; r6.z <- mat.Ambient.z
                 mov r7.xyz, cb1[17].xyzx  // r7.x <- mat.Diffuse.x; r7.y <- mat.Diffuse.y; r7.z <- mat.Diffuse.z
@@ -2255,17 +2275,17 @@ fxgroup
                 movc r7.xyz, r1.wwww, r7.xyzx, r13.xyzx
                 movc r8.xyz, r1.wwww, r8.xyzx, r14.xyzx
                 
-                #line 111 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
+                #line 112 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
                 mov r6.xyz, r6.xyzx  // r6.x <- A.x; r6.y <- A.y; r6.z <- A.z
                 mov r7.xyz, r7.xyzx  // r7.x <- D.x; r7.y <- D.y; r7.z <- D.z
                 mov r8.xyz, r8.xyzx  // r8.x <- S.x; r8.y <- S.y; r8.z <- S.z
                 
-                #line 114
+                #line 115
                 add r3.xyz, r3.xyzx, r6.xyzx
                 add r4.xyz, r4.xyzx, r7.xyzx
                 add r5.xyz, r5.xyzx, r8.xyzx
                 
-                #line 111
+                #line 112
                 nop 
                 mov r6.xyz, cb1[16].xyzx  // r6.x <- mat.Ambient.x; r6.y <- mat.Ambient.y; r6.z <- mat.Ambient.z
                 mov r7.xyz, cb1[17].xyzx  // r7.x <- mat.Diffuse.x; r7.y <- mat.Diffuse.y; r7.z <- mat.Diffuse.z
@@ -2308,27 +2328,27 @@ fxgroup
                 movc r0.xyz, r1.wwww, r0.yzwy, r13.xyzx  // r0.x <- diffuse.x; r0.y <- diffuse.y; r0.z <- diffuse.z
                 movc r1.xyz, r1.wwww, r1.xyzx, r14.xyzx
                 
-                #line 111 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
+                #line 112 "F:\code\GraphicsEngine\DirectX11\Resource\FX\Basic.fx"
                 mov r6.xyz, r6.xyzx  // r6.x <- A.x; r6.y <- A.y; r6.z <- A.z
                 mov r0.xyz, r0.xyzx  // r0.x <- D.x; r0.y <- D.y; r0.z <- D.z
                 mov r1.xyz, r1.xyzx  // r1.x <- S.x; r1.y <- S.y; r1.z <- S.z
                 
-                #line 114
+                #line 115
                 add r3.xyz, r3.xyzx, r6.xyzx
                 add r0.xyz, r0.xyzx, r4.xyzx  // r0.x <- diffuse.x; r0.y <- diffuse.y; r0.z <- diffuse.z
                 add r1.xyz, r1.xyzx, r5.xyzx  // r1.x <- spec.x; r1.y <- spec.y; r1.z <- spec.z
                 
-                #line 120
+                #line 121
                 add r0.xyz, r0.xyzx, r3.xyzx
                 mul r0.xyz, r0.xyzx, r2.xyzx
                 add r0.xyz, r1.xyzx, r0.xyzx  // r0.x <- litColor.x; r0.y <- litColor.y; r0.z <- litColor.z
                 
-                #line 124
+                #line 125
                 mul r0.w, r2.w, cb1[17].w  // r0.w <- litColor.w
                 mov o0.xyz, r0.xyzx
                 mov o0.w, r0.w
                 ret 
-                // Approximately 132 instruction slots used
+                // Approximately 137 instruction slots used
                             
             };
         }

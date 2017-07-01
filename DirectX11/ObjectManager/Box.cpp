@@ -105,7 +105,7 @@ void Box::Init()
 
     //ÔØÈëÎÆÀíÌùÍ¼
     HR(D3DX11CreateShaderResourceViewFromFile(ObjectManager::Device,
-        L"Resource/Textures/WoodCrate02.dds", 0, 0, &m_BoxMapSRV, 0));
+        L"Resource/Textures/WireFence.dds", 0, 0, &m_BoxMapSRV, 0));
 
     XMMATRIX I = XMMatrixIdentity();
     XMStoreFloat4x4(&m_TexTransform, I);
@@ -138,6 +138,7 @@ void Box::Update(float dt)
 
 void Box::Render()
 {
+    ObjectManager::Context->RSSetState(RenderStates::NoCullRS); 
     D3DX11_TECHNIQUE_DESC techDesc;
     Effects::FX->Light3TexTech->GetDesc(&techDesc);
     for (UINT p = 0; p < techDesc.Passes; ++p)
@@ -164,4 +165,5 @@ void Box::Render()
         Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, ObjectManager::Context);
         ObjectManager::Context->DrawIndexed(m_BoxCount, 0, 0);
     }
+    ObjectManager::Context->RSSetState(nullptr);
 }

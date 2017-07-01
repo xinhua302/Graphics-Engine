@@ -196,11 +196,9 @@ bool D3dApp::Init()
     //初始化光栅化状态
     RenderStates::InitAll(m_pd3dDevice);
 
-    //设置光栅化状态
-    m_pImmediateContext->RSSetState(nullptr);
-
     ObjectManager::CreateObject("Land");
     ObjectManager::CreateObject("Box");
+    ObjectManager::CreateObject("Water");
     return true;
 }
 

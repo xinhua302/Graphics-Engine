@@ -164,6 +164,7 @@
     <ClCompile Include="ObjectManager\BaseObject.cpp" />
     <ClCompile Include="ObjectManager\Box.cpp" />
     <ClCompile Include="ObjectManager\Land.cpp" />
+    <ClCompile Include="ObjectManager\Water.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +179,7 @@
     <ClInclude Include="ObjectManager\BaseObject.h" />
     <ClInclude Include="ObjectManager\Box.h" />
     <ClInclude Include="ObjectManager\Land.h" />
+    <ClInclude Include="ObjectManager\Water.h" />
     <ClInclude Include="WinMain.h" />
   </ItemGroup>
   <ItemGroup>

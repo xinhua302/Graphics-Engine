@@ -89,6 +89,7 @@ float4 PS(VertexOut pin, uniform int gLightCount, uniform bool gUseTexure) : SV_
 	{
 		// Sample texture.
 		texColor = gDiffuseMap.Sample( samAnisotropic, pin.Tex );
+        clip(texColor.a - 0.1f);
 	}
 	 
 	//
