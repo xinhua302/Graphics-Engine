@@ -76,9 +76,13 @@ void ObjectManager::CreateObject(string name)
     {
         object = new Land(Id);
     }
+    else if (name == "BoxReflection")
+    {
+        object = new Box(Id, 1);
+    }
     else if (name == "Box")
     {
-        object = new Box(Id);
+        object = new Box(Id, 0);
     }
     else if (name == "Water")
     {

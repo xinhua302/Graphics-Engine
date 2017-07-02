@@ -215,8 +215,9 @@ bool D3dApp::Init()
     //初始化光照管理器
     LightManager::InitAll();
 
-    ObjectManager::CreateObject("Land");
     ObjectManager::CreateObject("Box");
+    ObjectManager::CreateObject("Land");
+    ObjectManager::CreateObject("BoxReflection");
     ObjectManager::CreateObject("Water");
 
     LightManager::CreateLight();

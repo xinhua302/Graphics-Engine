@@ -61,7 +61,7 @@ void Land::Init()
     XMMATRIX grassTexScale = XMMatrixScaling(10.0f, 10.0f, 0.0f);
     XMStoreFloat4x4(&m_TexTransform, grassTexScale);
 
-    XMMATRIX world = XMMatrixTranslation(0.0f, -1.0f, 0.0f);
+    XMMATRIX world = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
     XMStoreFloat4x4(&m_World, world);
 
     //Ïà»ú±ä»»
@@ -119,6 +119,11 @@ void Land::Render()
         Effects::FX->SetTexTransform(XMLoadFloat4x4(&m_TexTransform));
         Effects::FX->SetMaterial(m_LandMat);
         Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, D3d->GetContext());
+        float blendFactor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+        D3d->GetContext()->OMSetBlendState(RenderStates::NoRenderTargetWritesBS, blendFactor, 0xffffffff);
+        D3d->GetContext()->OMSetDepthStencilState(RenderStates::MarkMirrorDSS, 1);
         D3d->GetContext()->DrawIndexed(m_LandCount, 0, 0);
+        D3d->GetContext()->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
+        D3d->GetContext()->OMSetDepthStencilState(nullptr, 0);
     }
 }

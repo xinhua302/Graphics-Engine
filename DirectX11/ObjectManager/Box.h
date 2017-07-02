@@ -4,7 +4,7 @@
 class Box :public Object
 {
 public:
-    Box(int id);
+    Box(int id, int mode);
     virtual ~Box();
 public:
     virtual void Init();
@@ -13,6 +13,7 @@ public:
     virtual void Render();
 
 private:
+    int m_Mode;
     //µØÐÎ
     ID3D11Buffer* m_pBoxVB;
     ID3D11Buffer* m_pBoxIB;

@@ -1,6 +1,6 @@
 #include "Box.h"
 
-Box::Box(int id) :Object(id)
+Box::Box(int id, int mode) :Object(id), m_Mode(mode)
 {
     Init();
 }
@@ -105,12 +105,13 @@ void Box::Init()
 
     //载入纹理贴图
     HR(D3DX11CreateShaderResourceViewFromFile(D3d->GetDevice(),
-        L"Resource/Textures/WireFence.dds", 0, 0, &m_BoxMapSRV, 0));
+        L"Resource/Textures/WoodCrate01.dds", 0, 0, &m_BoxMapSRV, 0));
 
     XMMATRIX I = XMMatrixIdentity();
     XMStoreFloat4x4(&m_TexTransform, I);
 
-    XMStoreFloat4x4(&m_World, I);
+    XMMATRIX world = XMMatrixTranslation(0.0f, 2.0f, 0.0f);
+    XMStoreFloat4x4(&m_World, world);
 
     //相机变换
     XMVECTOR pos = XMVectorSet(-2.3f, 5.06f, -9.0f, 1.0f);
@@ -154,10 +155,20 @@ void Box::Render()
         D3d->GetContext()->IASetVertexBuffers(0, 1, &m_pBoxVB, &stride, &offset);
         D3d->GetContext()->IASetIndexBuffer(m_pBoxIB, DXGI_FORMAT_R32_UINT, 0);
 
+        XMMATRIX world = XMLoadFloat4x4(&m_World);
+        if (m_Mode == 1)
+        {
+            D3d->GetContext()->RSSetState(RenderStates::CullClockwiseRS);
+            D3d->GetContext()->OMSetDepthStencilState(RenderStates::DrawReflectionDSS, 1);
+            XMVECTOR mirrorPlane = XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f);
+            XMMATRIX R = XMMatrixReflect(mirrorPlane);
+            world = XMLoadFloat4x4(&m_World) * R;
+        }
         //变换矩阵
         XMMATRIX view = XMLoadFloat4x4(&m_View);
         XMMATRIX proj = XMLoadFloat4x4(&m_Proj);
-        XMMATRIX world = XMLoadFloat4x4(&m_World);
+
+
         XMMATRIX worldViewProj = world*view*proj;
         XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
 
@@ -168,7 +179,9 @@ void Box::Render()
         Effects::FX->SetTexTransform(XMLoadFloat4x4(&m_TexTransform));
         Effects::FX->SetMaterial(m_BoxMat);
         Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, D3d->GetContext());
+        
         D3d->GetContext()->DrawIndexed(m_BoxCount, 0, 0);
     }
     D3d->GetContext()->RSSetState(nullptr);
+    D3d->GetContext()->OMSetDepthStencilState(nullptr, 0);
 }

@@ -56,7 +56,7 @@ void Water::Init()
 
     //载入草地的纹理贴图
     HR(D3DX11CreateShaderResourceViewFromFile(D3d->GetDevice(),
-        L"Resource/Textures/water1.dds", 0, 0, &m_WaterMapSRV, 0));
+        L"Resource/Textures/ice.dds", 0, 0, &m_WaterMapSRV, 0));
 
     XMMATRIX world = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
     XMStoreFloat4x4(&m_World, world);
@@ -86,11 +86,11 @@ void Water::Clear()
 
 void Water::Update(float dt)
 {
-    m_WaterOffset.y += dt * 0.05f;
-    m_WaterOffset.x += dt * 0.1f;
-    XMMATRIX waterOffset = XMMatrixTranslation(m_WaterOffset.x, m_WaterOffset.y, 0.0f);
-    XMMATRIX waterScale = XMMatrixScaling(10.0f, 10.0f, 0.0f);
-    XMStoreFloat4x4(&m_TexTransform, waterOffset * waterScale);
+    //m_WaterOffset.y += dt * 0.05f;
+    //m_WaterOffset.x += dt * 0.1f;
+    //XMMATRIX waterOffset = XMMatrixTranslation(m_WaterOffset.x, m_WaterOffset.y, 0.0f);
+    XMMATRIX waterScale = XMMatrixScaling(1.0f, 1.0f, 0.0f);
+    XMStoreFloat4x4(&m_TexTransform, /*waterOffset * */waterScale);
 }
 
 void Water::Render()
