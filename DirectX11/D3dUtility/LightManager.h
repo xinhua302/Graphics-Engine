@@ -9,7 +9,7 @@ public:
 
     static void CreateLight();
     static void Apply();
-private:
+
     static DirectionalLight Light[3];
 };
 #endif

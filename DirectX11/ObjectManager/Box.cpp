@@ -1,4 +1,5 @@
 #include "Box.h"
+#include "../D3dUtility/LightManager.h"
 
 Box::Box(int id, int mode) :Object(id), m_Mode(mode)
 {
@@ -155,6 +156,11 @@ void Box::Render()
         D3d->GetContext()->IASetVertexBuffers(0, 1, &m_pBoxVB, &stride, &offset);
         D3d->GetContext()->IASetIndexBuffer(m_pBoxIB, DXGI_FORMAT_R32_UINT, 0);
 
+        XMFLOAT3 oldLightDirections[3];
+        for (int i = 0; i < 3; ++i)
+        {
+            oldLightDirections[i] = LightManager::Light[i].Direction;
+        }
         XMMATRIX world = XMLoadFloat4x4(&m_World);
         if (m_Mode == 1)
         {
@@ -163,6 +169,16 @@ void Box::Render()
             XMVECTOR mirrorPlane = XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f);
             XMMATRIX R = XMMatrixReflect(mirrorPlane);
             world = XMLoadFloat4x4(&m_World) * R;
+
+            //改变光朝向
+            for (int i = 0; i < 3; ++i)
+            {
+                oldLightDirections[i] = LightManager::Light[i].Direction;
+
+                XMVECTOR lightDir = XMLoadFloat3(&LightManager::Light[i].Direction);
+                XMVECTOR reflectedLightDir = XMVector3TransformNormal(lightDir, R);
+                XMStoreFloat3(&LightManager::Light[i].Direction, reflectedLightDir);
+            }
         }
         //变换矩阵
         XMMATRIX view = XMLoadFloat4x4(&m_View);
@@ -181,6 +197,12 @@ void Box::Render()
         Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, D3d->GetContext());
         
         D3d->GetContext()->DrawIndexed(m_BoxCount, 0, 0);
+
+        //还原光的朝向
+        for (int i = 0; i < 3; ++i)
+        {
+            LightManager::Light[i].Direction = oldLightDirections[i];
+        }
     }
     D3d->GetContext()->RSSetState(nullptr);
     D3d->GetContext()->OMSetDepthStencilState(nullptr, 0);
