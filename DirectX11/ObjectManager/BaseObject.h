@@ -25,7 +25,7 @@ protected:
 class ObjectManager
 {
 public: 
-    static void InitAll(ID3D11Device* device, ID3D11DeviceContext* context, IDXGISwapChain* swapChain);
+    static void InitAll();
     static void DestroyAll();
 
     static void Update(float dt);
@@ -35,11 +35,6 @@ public:
 
     static map<int, Object*> ObjectMap;
     static UINT Id;
-    static ID3D11Device*           Device;
-    //D3D文本设备
-    static ID3D11DeviceContext*    Context;
-    //D3D交换链
-    static IDXGISwapChain*         SwapChain;
 };
 
 #endif

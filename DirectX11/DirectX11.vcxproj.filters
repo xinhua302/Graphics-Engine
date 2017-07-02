@@ -38,6 +38,9 @@
     <ClCompile Include="ObjectManager\Water.cpp">
       <Filter>ObjectManager</Filter>
     </ClCompile>
+    <ClCompile Include="D3dUtility\LightManager.cpp">
+      <Filter>D3dUtility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="D3dUtility">
@@ -93,6 +96,9 @@
     </ClInclude>
     <ClInclude Include="ObjectManager\Water.h">
       <Filter>ObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="D3dUtility\LightManager.h">
+      <Filter>D3dUtility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

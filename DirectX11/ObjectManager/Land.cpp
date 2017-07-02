@@ -32,7 +32,7 @@ void Land::Init()
     vLandbd.MiscFlags = 0;
     D3D11_SUBRESOURCE_DATA vLandInitData;
     vLandInitData.pSysMem = &landVB[0];
-    HR(ObjectManager::Device->CreateBuffer(&vLandbd, &vLandInitData, &m_pLandVB));
+    HR(D3d->GetDevice()->CreateBuffer(&vLandbd, &vLandInitData, &m_pLandVB));
 
     //索引
     int landIBCount = mesh.Indices.size();
@@ -50,12 +50,12 @@ void Land::Init()
     iLandbd.MiscFlags = 0;
     D3D11_SUBRESOURCE_DATA iLandInitData;
     iLandInitData.pSysMem = &landIB[0];
-    HR(ObjectManager::Device->CreateBuffer(&iLandbd, &iLandInitData, &m_pLandIB));
+    HR(D3d->GetDevice()->CreateBuffer(&iLandbd, &iLandInitData, &m_pLandIB));
     //顶点总数
     m_LandCount = landIBCount;
 
     //载入草地的纹理贴图
-    HR(D3DX11CreateShaderResourceViewFromFile(ObjectManager::Device,
+    HR(D3DX11CreateShaderResourceViewFromFile(D3d->GetDevice(),
         L"Resource/Textures/grass.dds", 0, 0, &m_LandeMapSRV, 0));
 
     XMMATRIX grassTexScale = XMMatrixScaling(10.0f, 10.0f, 0.0f);
@@ -74,6 +74,10 @@ void Land::Init()
     //投影变换
     XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*3.1415926f, D3d->GetAspectRatio(), 1.0f, 1000.0f);
     XMStoreFloat4x4(&m_Proj, P);
+
+    m_LandMat.Ambient = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+    m_LandMat.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+    m_LandMat.Specular = XMFLOAT4(0.2f, 0.2f, 0.2f, 16.0f);
 }
 
 void Land::Clear()
@@ -98,8 +102,8 @@ void Land::Render()
         UINT stride = sizeof(Vertex::Basic32);
         UINT offset = 0;
 
-        ObjectManager::Context->IASetVertexBuffers(0, 1, &m_pLandVB, &stride, &offset);
-        ObjectManager::Context->IASetIndexBuffer(m_pLandIB, DXGI_FORMAT_R32_UINT, 0);
+        D3d->GetContext()->IASetVertexBuffers(0, 1, &m_pLandVB, &stride, &offset);
+        D3d->GetContext()->IASetIndexBuffer(m_pLandIB, DXGI_FORMAT_R32_UINT, 0);
 
         //变换矩阵
         XMMATRIX view = XMLoadFloat4x4(&m_View);
@@ -113,7 +117,8 @@ void Land::Render()
         Effects::FX->SetWorldViewProj(worldViewProj);
         Effects::FX->SetDiffuseMap(m_LandeMapSRV);
         Effects::FX->SetTexTransform(XMLoadFloat4x4(&m_TexTransform));
-        Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, ObjectManager::Context);
-        ObjectManager::Context->DrawIndexed(m_LandCount, 0, 0);
+        Effects::FX->SetMaterial(m_LandMat);
+        Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, D3d->GetContext());
+        D3d->GetContext()->DrawIndexed(m_LandCount, 0, 0);
     }
 }

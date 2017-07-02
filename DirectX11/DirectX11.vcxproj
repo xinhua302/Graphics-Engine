@@ -158,6 +158,7 @@
     <ClCompile Include="D3dUtility\Effect.cpp" />
     <ClCompile Include="D3dUtility\GeometryGenerator.cpp" />
     <ClCompile Include="D3dUtility\LightHelper.cpp" />
+    <ClCompile Include="D3dUtility\LightManager.cpp" />
     <ClCompile Include="D3dUtility\MathHelper.cpp" />
     <ClCompile Include="D3dUtility\RenderStates.cpp" />
     <ClCompile Include="D3dUtility\Vertex.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="D3dUtility\Effect.h" />
     <ClInclude Include="D3dUtility\GeometryGenerator.h" />
     <ClInclude Include="D3dUtility\LightHelper.h" />
+    <ClInclude Include="D3dUtility\LightManager.h" />
     <ClInclude Include="D3dUtility\MathHelper.h" />
     <ClInclude Include="D3dUtility\RenderStates.h" />
     <ClInclude Include="D3dUtility\Vertex.h" />

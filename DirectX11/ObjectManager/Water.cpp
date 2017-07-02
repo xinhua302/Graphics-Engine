@@ -32,7 +32,7 @@ void Water::Init()
     vLandbd.MiscFlags = 0;
     D3D11_SUBRESOURCE_DATA vLandInitData;
     vLandInitData.pSysMem = &landVB[0];
-    HR(ObjectManager::Device->CreateBuffer(&vLandbd, &vLandInitData, &m_pWaterVB));
+    HR(D3d->GetDevice()->CreateBuffer(&vLandbd, &vLandInitData, &m_pWaterVB));
 
     //索引
     int landIBCount = mesh.Indices.size();
@@ -50,12 +50,12 @@ void Water::Init()
     iLandbd.MiscFlags = 0;
     D3D11_SUBRESOURCE_DATA iLandInitData;
     iLandInitData.pSysMem = &landIB[0];
-    HR(ObjectManager::Device->CreateBuffer(&iLandbd, &iLandInitData, &m_pWaterIB));
+    HR(D3d->GetDevice()->CreateBuffer(&iLandbd, &iLandInitData, &m_pWaterIB));
     //顶点总数
     m_WaterCount = landIBCount;
 
     //载入草地的纹理贴图
-    HR(D3DX11CreateShaderResourceViewFromFile(ObjectManager::Device,
+    HR(D3DX11CreateShaderResourceViewFromFile(D3d->GetDevice(),
         L"Resource/Textures/water1.dds", 0, 0, &m_WaterMapSRV, 0));
 
     XMMATRIX world = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
@@ -103,8 +103,8 @@ void Water::Render()
         UINT stride = sizeof(Vertex::Basic32);
         UINT offset = 0;
 
-        ObjectManager::Context->IASetVertexBuffers(0, 1, &m_pWaterVB, &stride, &offset);
-        ObjectManager::Context->IASetIndexBuffer(m_pWaterIB, DXGI_FORMAT_R32_UINT, 0);
+        D3d->GetContext()->IASetVertexBuffers(0, 1, &m_pWaterVB, &stride, &offset);
+        D3d->GetContext()->IASetIndexBuffer(m_pWaterIB, DXGI_FORMAT_R32_UINT, 0);
 
         //变换矩阵
         XMMATRIX view = XMLoadFloat4x4(&m_View);
@@ -120,10 +120,10 @@ void Water::Render()
         Effects::FX->SetTexTransform(XMLoadFloat4x4(&m_TexTransform));
         Effects::FX->SetMaterial(m_WaterMat);
         float blendFactor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-        ObjectManager::Context->OMSetBlendState(RenderStates::TransparentBS, blendFactor, 0xffffffff);
+        D3d->GetContext()->OMSetBlendState(RenderStates::TransparentBS, blendFactor, 0xffffffff);
 
-        Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, ObjectManager::Context);
-        ObjectManager::Context->DrawIndexed(m_WaterCount, 0, 0);
-        ObjectManager::Context->OMSetBlendState(0, blendFactor, 0xffffffff);
+        Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, D3d->GetContext());
+        D3d->GetContext()->DrawIndexed(m_WaterCount, 0, 0);
+        D3d->GetContext()->OMSetBlendState(0, blendFactor, 0xffffffff);
     }
 }

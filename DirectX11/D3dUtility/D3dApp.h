@@ -20,6 +20,10 @@ public:
     void OnResize();
     float GetAspectRatio();
 
+    ID3D11Device* GetDevice() const;
+    ID3D11DeviceContext* GetContext() const;
+    IDXGISwapChain* GeSwapChain() const;
+
 private:
     bool InitDevice(int width, int height);
 private:
@@ -42,22 +46,10 @@ private:
 	ID3D11Texture2D*        m_pDepthStencil;
     //深度模板视图
 	ID3D11DepthStencilView* m_pDepthStencilView;
-    //渲染状态
-    ID3D11RasterizerState*  m_WireframeRS;
     //视口
 	D3D11_VIEWPORT			m_ScreenViewport;
 
 	int						m_Width;
 	int						m_Height;
-
-    //顶点和索引
-    ID3D11Buffer* m_VB;
-    ID3D11Buffer* m_IB;
-    //纹理贴图
-    ID3D11ShaderResourceView* m_DiffuseMapSRV;
-    //矩阵变换
-    XMFLOAT4X4 m_BoxWorld;
-    XMFLOAT4X4 m_View;
-    XMFLOAT4X4 m_Proj;
 };
 #endif

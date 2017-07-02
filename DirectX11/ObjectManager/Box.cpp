@@ -62,7 +62,7 @@ void Box::Init()
     vbd.MiscFlags = 0;
     D3D11_SUBRESOURCE_DATA vinitData;
     vinitData.pSysMem = &v[0];
-    HR(ObjectManager::Device->CreateBuffer(&vbd, &vinitData, &m_pBoxVB));
+    HR(D3d->GetDevice()->CreateBuffer(&vbd, &vinitData, &m_pBoxVB));
 
 
     UINT i[36];
@@ -99,12 +99,12 @@ void Box::Init()
     ibd.MiscFlags = 0;
     D3D11_SUBRESOURCE_DATA iinitData;
     iinitData.pSysMem = &i[0];
-    HR(ObjectManager::Device->CreateBuffer(&ibd, &iinitData, &m_pBoxIB));
+    HR(D3d->GetDevice()->CreateBuffer(&ibd, &iinitData, &m_pBoxIB));
 
     m_BoxCount = 36;
 
     //载入纹理贴图
-    HR(D3DX11CreateShaderResourceViewFromFile(ObjectManager::Device,
+    HR(D3DX11CreateShaderResourceViewFromFile(D3d->GetDevice(),
         L"Resource/Textures/WireFence.dds", 0, 0, &m_BoxMapSRV, 0));
 
     XMMATRIX I = XMMatrixIdentity();
@@ -122,6 +122,10 @@ void Box::Init()
     //投影变换
     XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*3.1415926f, D3d->GetAspectRatio(), 1.0f, 1000.0f);
     XMStoreFloat4x4(&m_Proj, P);
+
+    m_BoxMat.Ambient = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+    m_BoxMat.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+    m_BoxMat.Specular = XMFLOAT4(0.4f, 0.4f, 0.4f, 16.0f);
 }
 
 void Box::Clear()
@@ -138,7 +142,7 @@ void Box::Update(float dt)
 
 void Box::Render()
 {
-    ObjectManager::Context->RSSetState(RenderStates::NoCullRS); 
+    D3d->GetContext()->RSSetState(RenderStates::NoCullRS);
     D3DX11_TECHNIQUE_DESC techDesc;
     Effects::FX->Light3TexTech->GetDesc(&techDesc);
     for (UINT p = 0; p < techDesc.Passes; ++p)
@@ -147,8 +151,8 @@ void Box::Render()
         UINT stride = sizeof(Vertex::Basic32);
         UINT offset = 0;
 
-        ObjectManager::Context->IASetVertexBuffers(0, 1, &m_pBoxVB, &stride, &offset);
-        ObjectManager::Context->IASetIndexBuffer(m_pBoxIB, DXGI_FORMAT_R32_UINT, 0);
+        D3d->GetContext()->IASetVertexBuffers(0, 1, &m_pBoxVB, &stride, &offset);
+        D3d->GetContext()->IASetIndexBuffer(m_pBoxIB, DXGI_FORMAT_R32_UINT, 0);
 
         //变换矩阵
         XMMATRIX view = XMLoadFloat4x4(&m_View);
@@ -162,8 +166,9 @@ void Box::Render()
         Effects::FX->SetWorldViewProj(worldViewProj);
         Effects::FX->SetDiffuseMap(m_BoxMapSRV);
         Effects::FX->SetTexTransform(XMLoadFloat4x4(&m_TexTransform));
-        Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, ObjectManager::Context);
-        ObjectManager::Context->DrawIndexed(m_BoxCount, 0, 0);
+        Effects::FX->SetMaterial(m_BoxMat);
+        Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, D3d->GetContext());
+        D3d->GetContext()->DrawIndexed(m_BoxCount, 0, 0);
     }
-    ObjectManager::Context->RSSetState(nullptr);
+    D3d->GetContext()->RSSetState(nullptr);
 }

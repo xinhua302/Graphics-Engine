@@ -33,11 +33,10 @@ void Object::Render()
 
 }
 
-void ObjectManager::InitAll(ID3D11Device* device, ID3D11DeviceContext* context, IDXGISwapChain* swapChain)
+void ObjectManager::InitAll()
 {
-    ObjectManager::Device = device;
-    ObjectManager::Context = context;
-    ObjectManager::SwapChain = swapChain;
+    DestroyAll();
+    Id = 0;
 }
 
 void ObjectManager::DestroyAll()
@@ -92,9 +91,3 @@ void ObjectManager::CreateObject(string name)
 map<int, Object*> ObjectManager::ObjectMap;
 
 UINT ObjectManager::Id = 0;
-
-ID3D11Device* ObjectManager::Device = nullptr;
-
-ID3D11DeviceContext* ObjectManager::Context = nullptr;
-
-IDXGISwapChain* ObjectManager::SwapChain = nullptr;

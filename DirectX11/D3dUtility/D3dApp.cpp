@@ -4,6 +4,7 @@
 #include "MathHelper.h"
 #include "GeometryGenerator.h"
 #include "../ObjectManager/BaseObject.h"
+#include "LightManager.h"
 #include <cassert>
 
 D3dApp * D3dApp::m_pInstance = nullptr;
@@ -111,6 +112,21 @@ float D3dApp::GetAspectRatio()
     return static_cast<float>(m_Width) / static_cast<float>(m_Height);
 }
 
+ID3D11Device* D3dApp::GetDevice() const
+{
+    return m_pd3dDevice;
+}
+
+ID3D11DeviceContext* D3dApp::GetContext() const
+{
+    return m_pImmediateContext;
+}
+
+IDXGISwapChain* D3dApp::GeSwapChain() const
+{
+    return m_pSwapChain;
+}
+
 bool D3dApp::InitDevice(int width, int height)
 {
 	m_Width = width;
@@ -185,7 +201,7 @@ bool D3dApp::Init()
     OnResize();
 
     //创建对象管理器
-    ObjectManager::InitAll(m_pd3dDevice, m_pImmediateContext, m_pSwapChain);
+    ObjectManager::InitAll();
 
     //初始化Shader
     Effects::InitAll(m_pd3dDevice);
@@ -196,9 +212,14 @@ bool D3dApp::Init()
     //初始化光栅化状态
     RenderStates::InitAll(m_pd3dDevice);
 
+    //初始化光照管理器
+    LightManager::InitAll();
+
     ObjectManager::CreateObject("Land");
     ObjectManager::CreateObject("Box");
     ObjectManager::CreateObject("Water");
+
+    LightManager::CreateLight();
     return true;
 }
 
@@ -219,68 +240,9 @@ bool D3dApp::Render()
     m_pImmediateContext->IASetInputLayout(InputLayouts::Basic32);
     m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    //材质
-    Material Mat;
-    Mat.Ambient = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-    Mat.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-    Mat.Specular = XMFLOAT4(0.6f, 0.6f, 0.6f, 16.0f);
-
-    //观察的位置
-    XMFLOAT3 mEyePosW = XMFLOAT3(-2.3f, 5.06f, -19.0f);
-
-    //方向光源
-    DirectionalLight mDirLights[3];
-    mDirLights[0].Ambient = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-    mDirLights[0].Diffuse = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-    mDirLights[0].Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-    mDirLights[0].Direction = XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
-
-    mDirLights[1].Ambient = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-    mDirLights[1].Diffuse = XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
-    mDirLights[1].Specular = XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
-    mDirLights[1].Direction = XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
-
-    mDirLights[2].Ambient = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-    mDirLights[2].Diffuse = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-    mDirLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-    mDirLights[2].Direction = XMFLOAT3(0.0f, -0.707f, -0.707f);
-
-    Effects::FX->SetDirLights(mDirLights);
-    Effects::FX->SetEyePosW(mEyePosW);
-
-    D3DX11_TECHNIQUE_DESC techDesc;
-    Effects::FX->Light3TexTech->GetDesc(&techDesc);
-    for (UINT p = 0; p < techDesc.Passes; ++p)
-    {
-		//设置顶点和索引
-		UINT stride = sizeof(Vertex::Basic32);
-		UINT offset = 0;
-		m_pImmediateContext->IASetVertexBuffers(0, 1, &m_VB, &stride, &offset);
-		m_pImmediateContext->IASetIndexBuffer(m_IB, DXGI_FORMAT_R32_UINT, 0);
-
-		//变换矩阵
-		XMFLOAT4X4 mTexTransform;
-		XMMATRIX I = XMMatrixIdentity();
-		XMStoreFloat4x4(&mTexTransform, I);
-		XMMATRIX view = XMLoadFloat4x4(&m_View);
-		XMMATRIX proj = XMLoadFloat4x4(&m_Proj);
-		XMMATRIX world = XMLoadFloat4x4(&m_BoxWorld);
-		XMMATRIX worldViewProj = world*view*proj;
-
-        world = XMLoadFloat4x4(&m_BoxWorld);
-        XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-        worldViewProj = world*view*proj;
-        Effects::FX->SetWorld(world);
-        Effects::FX->SetWorldInvTranspose(worldInvTranspose);
-        Effects::FX->SetWorldViewProj(worldViewProj);
-        Effects::FX->SetTexTransform(XMLoadFloat4x4(&mTexTransform));
-        Effects::FX->SetMaterial(Mat);
-        Effects::FX->SetDiffuseMap(m_DiffuseMapSRV);
-        //应用
-        Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, m_pImmediateContext);
-        m_pImmediateContext->DrawIndexed(36, 0, 0);
-    }
-
+    //设置光照
+    LightManager::Apply();
+    //渲染对象
     ObjectManager::Render();
 
     HR(m_pSwapChain->Present(0, 0));
@@ -293,10 +255,6 @@ void D3dApp::Clear()
     ReleaseCOM(m_pDepthStencilView);
     ReleaseCOM(m_pSwapChain);
     ReleaseCOM(m_pDepthStencil);
-    ReleaseCOM(m_WireframeRS);
-    ReleaseCOM(m_DiffuseMapSRV);
-    ReleaseCOM(m_VB);
-    ReleaseCOM(m_IB);
 
     if (m_pImmediateContext)
         m_pImmediateContext->ClearState();
@@ -308,4 +266,5 @@ void D3dApp::Clear()
     Effects::DestroyAll();
     InputLayouts::DestroyAll();
     RenderStates::DestroyAll();
+    LightManager::DestroyAll();
 }
