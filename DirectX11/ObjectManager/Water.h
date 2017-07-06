@@ -4,7 +4,7 @@
 class Water:public Object
 {
 public:
-    Water(int id);
+    Water(int id, int mode);
     virtual ~Water();
 public:
     virtual void Init();
@@ -13,6 +13,7 @@ public:
     virtual void Render();
 
 private:
+    int m_Mode;
     //µØÐÎ
     ID3D11Buffer* m_pWaterVB;
     ID3D11Buffer* m_pWaterIB;

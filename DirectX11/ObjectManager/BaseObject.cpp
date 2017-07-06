@@ -86,7 +86,11 @@ void ObjectManager::CreateObject(string name)
     }
     else if (name == "Water")
     {
-        object = new Water(Id);
+        object = new Water(Id, 1);
+    }
+    else if (name == "MarkWater")
+    {
+        object = new Water(Id, 0);
     }
     ObjectMap.insert(make_pair(Id, object));
     Id++;

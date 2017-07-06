@@ -1,6 +1,6 @@
 #include "Water.h"
 
-Water::Water(int id) :Object(id)
+Water::Water(int id,int mode) :Object(id) , m_Mode(mode)
 {
     Init();
 }
@@ -56,7 +56,7 @@ void Water::Init()
 
     //载入草地的纹理贴图
     HR(D3DX11CreateShaderResourceViewFromFile(D3d->GetDevice(),
-        L"Resource/Textures/ice.dds", 0, 0, &m_WaterMapSRV, 0));
+        L"Resource/Textures/water1.dds", 0, 0, &m_WaterMapSRV, 0));
 
     XMMATRIX world = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
     XMStoreFloat4x4(&m_World, world);
@@ -86,11 +86,11 @@ void Water::Clear()
 
 void Water::Update(float dt)
 {
-    //m_WaterOffset.y += dt * 0.05f;
-    //m_WaterOffset.x += dt * 0.1f;
-    //XMMATRIX waterOffset = XMMatrixTranslation(m_WaterOffset.x, m_WaterOffset.y, 0.0f);
+    m_WaterOffset.y += dt * 0.05f;
+    m_WaterOffset.x += dt * 0.1f;
+    XMMATRIX waterOffset = XMMatrixTranslation(m_WaterOffset.x, m_WaterOffset.y, 0.0f);
     XMMATRIX waterScale = XMMatrixScaling(1.0f, 1.0f, 0.0f);
-    XMStoreFloat4x4(&m_TexTransform, /*waterOffset * */waterScale);
+    XMStoreFloat4x4(&m_TexTransform, waterOffset * waterScale);
 }
 
 void Water::Render()
@@ -120,10 +120,22 @@ void Water::Render()
         Effects::FX->SetTexTransform(XMLoadFloat4x4(&m_TexTransform));
         Effects::FX->SetMaterial(m_WaterMat);
         float blendFactor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-        D3d->GetContext()->OMSetBlendState(RenderStates::TransparentBS, blendFactor, 0xffffffff);
+
+        if (m_Mode == 1)
+        {
+            D3d->GetContext()->OMSetBlendState(RenderStates::TransparentBS, blendFactor, 0xffffffff);
+            D3d->GetContext()->OMSetDepthStencilState(nullptr, 0);
+        }
+        else
+        {
+            D3d->GetContext()->OMSetBlendState(RenderStates::NoRenderTargetWritesBS, blendFactor, 0xffffffff);
+            D3d->GetContext()->OMSetDepthStencilState(RenderStates::MarkMirrorDSS, 1);
+        }
+        
 
         Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, D3d->GetContext());
         D3d->GetContext()->DrawIndexed(m_WaterCount, 0, 0);
         D3d->GetContext()->OMSetBlendState(0, blendFactor, 0xffffffff);
+        D3d->GetContext()->OMSetDepthStencilState(nullptr, 0);
     }
 }
