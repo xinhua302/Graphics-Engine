@@ -220,6 +220,7 @@ bool D3dApp::Init()
     ObjectManager::CreateObject("Land");
     ObjectManager::CreateObject("BoxReflection");
     ObjectManager::CreateObject("Water");
+	ObjectManager::CreateObject("BoxShadow");
 
     LightManager::CreateLight();
     return true;

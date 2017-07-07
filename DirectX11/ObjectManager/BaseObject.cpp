@@ -84,6 +84,10 @@ void ObjectManager::CreateObject(string name)
     {
         object = new Box(Id, 0);
     }
+	else if (name == "BoxShadow")
+	{
+		object = new Box(Id, 2);
+	}
     else if (name == "Water")
     {
         object = new Water(Id, 1);

@@ -128,6 +128,10 @@ void Box::Init()
     m_BoxMat.Ambient = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
     m_BoxMat.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
     m_BoxMat.Specular = XMFLOAT4(0.4f, 0.4f, 0.4f, 16.0f);
+
+	m_ShadowMat.Ambient = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	m_ShadowMat.Diffuse = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.5f);
+	m_ShadowMat.Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 16.0f);
 }
 
 void Box::Clear()
@@ -144,6 +148,7 @@ void Box::Update(float dt)
 
 void Box::Render()
 {
+	float blendFactor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
     D3d->GetContext()->RSSetState(RenderStates::NoCullRS);
     D3DX11_TECHNIQUE_DESC techDesc;
     Effects::FX->Light3TexTech->GetDesc(&techDesc);
@@ -179,7 +184,24 @@ void Box::Render()
                 XMVECTOR reflectedLightDir = XMVector3TransformNormal(lightDir, R);
                 XMStoreFloat3(&LightManager::Light[i].Direction, reflectedLightDir);
             }
+			Effects::FX->SetMaterial(m_BoxMat);
         }
+		else if (m_Mode == 2)
+		{
+			D3d->GetContext()->OMSetDepthStencilState(RenderStates::NoDoubleBlendDSS, 1);
+			D3d->GetContext()->OMSetBlendState(RenderStates::TransparentBS, blendFactor, 0xffffffff);
+			XMVECTOR shadowPlane = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+			XMVECTOR shadowLight = -XMLoadFloat3(&oldLightDirections[1]);
+			XMMATRIX S = XMMatrixShadow(shadowPlane, shadowLight);
+			XMMATRIX shadowOffsetY = XMMatrixTranslation(0.0f, 0.001f, 0.0f);
+			world = world * S * shadowOffsetY;
+
+			Effects::FX->SetMaterial(m_ShadowMat);
+		}
+		else
+		{
+			Effects::FX->SetMaterial(m_BoxMat);
+		}
         //±ä»»¾ØÕó
         XMMATRIX view = XMLoadFloat4x4(&m_View);
         XMMATRIX proj = XMLoadFloat4x4(&m_Proj);
@@ -193,7 +215,6 @@ void Box::Render()
         Effects::FX->SetWorldViewProj(worldViewProj);
         Effects::FX->SetDiffuseMap(m_BoxMapSRV);
         Effects::FX->SetTexTransform(XMLoadFloat4x4(&m_TexTransform));
-        Effects::FX->SetMaterial(m_BoxMat);
         Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, D3d->GetContext());
         
         D3d->GetContext()->DrawIndexed(m_BoxCount, 0, 0);
@@ -206,4 +227,5 @@ void Box::Render()
     }
     D3d->GetContext()->RSSetState(nullptr);
     D3d->GetContext()->OMSetDepthStencilState(nullptr, 0);
+	D3d->GetContext()->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
 }

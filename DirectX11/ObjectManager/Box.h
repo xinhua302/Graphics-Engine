@@ -27,6 +27,7 @@ private:
     XMFLOAT4X4 m_Proj;
 
     Material m_BoxMat;
+	Material m_ShadowMat;
 };
 
 #endif
