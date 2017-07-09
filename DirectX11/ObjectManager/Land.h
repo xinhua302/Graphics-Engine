@@ -22,8 +22,6 @@ private:
 
     XMFLOAT4X4 m_TexTransform;
     XMFLOAT4X4 m_World;
-    XMFLOAT4X4 m_View;
-    XMFLOAT4X4 m_Proj;
 
     Material m_LandMat;
 };

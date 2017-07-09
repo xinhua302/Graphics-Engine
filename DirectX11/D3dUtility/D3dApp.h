@@ -23,6 +23,12 @@ public:
     ID3D11Device* GetDevice() const;
     ID3D11DeviceContext* GetContext() const;
     IDXGISwapChain* GeSwapChain() const;
+    Camera          GetCamera() const;
+
+    //控制鼠标
+    void OnMouseDown(WPARAM btnState, int x, int y);
+    void OnMouseUp(WPARAM btnState, int x, int y);
+    void OnMouseMove(WPARAM btnState, int x, int y);
 
 private:
     bool InitDevice(int width, int height);
@@ -49,7 +55,16 @@ private:
     //视口
 	D3D11_VIEWPORT			m_ScreenViewport;
 
+    //开启多重采样
+    bool m_Enable4xMsaa;
+    UINT m_4xMsaaQuality;
+
 	int						m_Width;
 	int						m_Height;
+
+    Camera                  m_Camera;
+
+    //上一次鼠标位置
+    POINT m_LastMousePos;
 };
 #endif

@@ -16,7 +16,9 @@ D3dApp* D3dApp::GetInstance()
 
 D3dApp::D3dApp(HWND hwnd)
 :				m_DriverType(D3D_DRIVER_TYPE_HARDWARE),
-				m_Hwnd(hwnd)
+				m_Hwnd(hwnd),
+                m_Enable4xMsaa(true),
+                m_4xMsaaQuality(0)
 {
 	ZeroMemory(&m_ScreenViewport, sizeof(D3D11_VIEWPORT));
 }
@@ -84,8 +86,16 @@ void D3dApp::OnResize()
     depthStencilDesc.MipLevels = 1;
     depthStencilDesc.ArraySize = 1;
     depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    depthStencilDesc.SampleDesc.Count = 1;
-    depthStencilDesc.SampleDesc.Quality = 0;
+    if (m_Enable4xMsaa)
+    {
+        depthStencilDesc.SampleDesc.Count = 4;
+        depthStencilDesc.SampleDesc.Quality = m_4xMsaaQuality - 1;
+    }
+    else
+    {
+        depthStencilDesc.SampleDesc.Count = 1;
+        depthStencilDesc.SampleDesc.Quality = 0;
+    }
     depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
     depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
     depthStencilDesc.CPUAccessFlags = 0;
@@ -127,6 +137,38 @@ IDXGISwapChain* D3dApp::GeSwapChain() const
     return m_pSwapChain;
 }
 
+Camera D3dApp::GetCamera() const
+{
+    return m_Camera; 
+}
+
+void D3dApp::OnMouseDown(WPARAM btnState, int x, int y)
+{
+    m_LastMousePos.x = x;
+    m_LastMousePos.y = y;
+    SetCapture(m_Hwnd);
+}
+
+void D3dApp::OnMouseUp(WPARAM btnState, int x, int y)
+{
+    ReleaseCapture();
+}
+
+void D3dApp::OnMouseMove(WPARAM btnState, int x, int y)
+{
+    if ((btnState & MK_LBUTTON) != 0)
+    {
+        float dx = XMConvertToRadians(0.25f*static_cast<float>(x - m_LastMousePos.x));
+        float dy = XMConvertToRadians(0.25f*static_cast<float>(y - m_LastMousePos.y));
+
+        m_Camera.Pitch(dy);
+        m_Camera.RotateY(dx);
+    }
+
+    m_LastMousePos.x = x;
+    m_LastMousePos.y = y;
+}
+
 bool D3dApp::InitDevice(int width, int height)
 {
 	m_Width = width;
@@ -161,6 +203,10 @@ bool D3dApp::InitDevice(int width, int height)
 		return false;
 	}
 
+    HR(m_pd3dDevice->CheckMultisampleQualityLevels(
+        DXGI_FORMAT_R8G8B8A8_UNORM, 4, &m_4xMsaaQuality));
+    assert(m_4xMsaaQuality > 0);
+
 	DXGI_SWAP_CHAIN_DESC sd;
 	sd.BufferDesc.Width = m_Width;
 	sd.BufferDesc.Height = m_Height;
@@ -169,8 +215,17 @@ bool D3dApp::InitDevice(int width, int height)
 	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	sd.SampleDesc.Count = 1;
-	sd.SampleDesc.Quality = 0;	
+    //是否开启多重采样 
+    if (m_Enable4xMsaa)
+    {
+        sd.SampleDesc.Count = 4;
+        sd.SampleDesc.Quality = m_4xMsaaQuality - 1;
+    }
+    else
+    {
+        sd.SampleDesc.Count = 1;
+        sd.SampleDesc.Quality = 0;
+    }
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	sd.BufferCount = 1;
 	sd.OutputWindow = m_Hwnd;
@@ -200,6 +255,10 @@ bool D3dApp::Init()
 {
     OnResize();
 
+    //设置相机
+    m_Camera.SetPosition(0.0f, 2.0f, -15.0f);
+    m_Camera.SetLens(0.25f*MathHelper::Pi, GetAspectRatio(), 1.0f, 1000.0f);
+
     //创建对象管理器
     ObjectManager::InitAll();
 
@@ -228,6 +287,18 @@ bool D3dApp::Init()
 
 bool D3dApp::Update(float dt)
 {
+    if (GetAsyncKeyState('W') & 0x8000)
+        m_Camera.Walk(10.0f*dt);
+
+    if (GetAsyncKeyState('S') & 0x8000)
+        m_Camera.Walk(-10.0f*dt);
+
+    if (GetAsyncKeyState('A') & 0x8000)
+        m_Camera.Strafe(-10.0f*dt);
+
+    if (GetAsyncKeyState('D') & 0x8000)
+        m_Camera.Strafe(10.0f*dt);
+
     ObjectManager::Update(dt);
 	return true;
 }
@@ -242,6 +313,9 @@ bool D3dApp::Render()
     //设置输入布局和拓扑结构
     m_pImmediateContext->IASetInputLayout(InputLayouts::Basic32);
     m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+    //更新相机
+    m_Camera.UpdateViewMatrix();
 
     //设置光照
     LightManager::Apply();

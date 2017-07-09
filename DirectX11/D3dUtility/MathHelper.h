@@ -6,6 +6,7 @@ class MathHelper
 {
 public:
     static XMMATRIX InverseTranspose(CXMMATRIX M);
+    static const float Pi;
 };
 
 

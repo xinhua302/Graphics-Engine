@@ -1,6 +1,7 @@
 #ifndef __WinMain_h
 #define __WinMain_h
 #include <windows.h>
+#include "windowsx.h"
 #include <timeapi.h>
 
 int WINAPI WinMain(HINSTANCE hinstance,

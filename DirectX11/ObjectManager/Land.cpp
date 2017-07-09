@@ -64,17 +64,6 @@ void Land::Init()
     XMMATRIX world = XMMatrixTranslation(0.0f, -4.0f, 0.0f);
     XMStoreFloat4x4(&m_World, world);
 
-    //相机变换
-    XMVECTOR pos = XMVectorSet(-2.3f, 5.06f, -9.0f, 1.0f);
-    XMVECTOR target = XMVectorZero();
-    XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-    XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
-    XMStoreFloat4x4(&m_View, V);
-
-    //投影变换
-    XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*3.1415926f, D3d->GetAspectRatio(), 1.0f, 1000.0f);
-    XMStoreFloat4x4(&m_Proj, P);
-
     m_LandMat.Ambient = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
     m_LandMat.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
     m_LandMat.Specular = XMFLOAT4(0.2f, 0.2f, 0.2f, 16.0f);
@@ -106,8 +95,8 @@ void Land::Render()
         D3d->GetContext()->IASetIndexBuffer(m_pLandIB, DXGI_FORMAT_R32_UINT, 0);
 
         //变换矩阵
-        XMMATRIX view = XMLoadFloat4x4(&m_View);
-        XMMATRIX proj = XMLoadFloat4x4(&m_Proj);
+        XMMATRIX view = D3d->GetCamera().View();
+        XMMATRIX proj = D3d->GetCamera().Proj();
         XMMATRIX world = XMLoadFloat4x4(&m_World);
         XMMATRIX worldViewProj = world*view*proj;
         XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);

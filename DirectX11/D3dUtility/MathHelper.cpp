@@ -9,3 +9,5 @@ XMMATRIX MathHelper::InverseTranspose(CXMMATRIX M)
     return XMMatrixTranspose(XMMatrixInverse(&det, A));
         
 }
+
+const float MathHelper::Pi = 3.1415926535f;

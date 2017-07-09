@@ -14,6 +14,7 @@
 #include "RenderStates.h"
 #include "GeometryGenerator.h"
 #include "LightHelper.h"
+#include "Camera.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
 #ifndef HR

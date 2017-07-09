@@ -83,6 +83,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		if (wParam == VK_ESCAPE)
 			::DestroyWindow(hwnd);
 		break;
+    case WM_RBUTTONDOWN:
+        D3d->OnMouseDown(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        break;
+    case WM_RBUTTONUP:
+        D3d->OnMouseUp(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        break;
+    case WM_MOUSEMOVE:
+        D3d->OnMouseMove(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        break;
 	}
 	return ::DefWindowProc(hwnd, msg, wParam, lParam);
 }

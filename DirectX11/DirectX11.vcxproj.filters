@@ -41,6 +41,9 @@
     <ClCompile Include="D3dUtility\LightManager.cpp">
       <Filter>D3dUtility</Filter>
     </ClCompile>
+    <ClCompile Include="D3dUtility\Camera.cpp">
+      <Filter>D3dUtility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="D3dUtility">
@@ -95,6 +98,9 @@
       <Filter>ObjectManager</Filter>
     </ClInclude>
     <ClInclude Include="D3dUtility\LightManager.h">
+      <Filter>D3dUtility</Filter>
+    </ClInclude>
+    <ClInclude Include="D3dUtility\Camera.h">
       <Filter>D3dUtility</Filter>
     </ClInclude>
   </ItemGroup>

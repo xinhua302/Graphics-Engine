@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="D3dUtility\Camera.cpp" />
     <ClCompile Include="D3dUtility\D3dApp.cpp" />
     <ClCompile Include="D3dUtility\D3dUtility.cpp" />
     <ClCompile Include="D3dUtility\Effect.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="D3dUtility\Camera.h" />
     <ClInclude Include="D3dUtility\D3dApp.h" />
     <ClInclude Include="D3dUtility\D3dUtility.h" />
     <ClInclude Include="D3dUtility\Effect.h" />
