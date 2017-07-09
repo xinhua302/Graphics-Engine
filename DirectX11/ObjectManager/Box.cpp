@@ -151,7 +151,7 @@ void Box::Render()
 	float blendFactor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
     D3d->GetContext()->RSSetState(RenderStates::NoCullRS);
     D3DX11_TECHNIQUE_DESC techDesc;
-    Effects::FX->Light3TexTech->GetDesc(&techDesc);
+    Effects::FX->Tech->GetDesc(&techDesc);
     for (UINT p = 0; p < techDesc.Passes; ++p)
     {
         //设置顶点和索引
@@ -215,7 +215,7 @@ void Box::Render()
         Effects::FX->SetWorldViewProj(worldViewProj);
         Effects::FX->SetDiffuseMap(m_BoxMapSRV);
         Effects::FX->SetTexTransform(XMLoadFloat4x4(&m_TexTransform));
-        Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, D3d->GetContext());
+        Effects::FX->Tech->GetPassByIndex(p)->Apply(0, D3d->GetContext());
         
         D3d->GetContext()->DrawIndexed(m_BoxCount, 0, 0);
 

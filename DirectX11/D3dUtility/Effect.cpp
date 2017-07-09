@@ -17,14 +17,7 @@ Effect::Effect(ID3D11Device* device, const std::wstring& filename)
     HR(D3DX11CreateEffectFromMemory(&compiledShader[0], size,
         0, device, &m_FX));
 
-    Light1Tech = m_FX->GetTechniqueByName("Light1");
-    Light2Tech = m_FX->GetTechniqueByName("Light2");
-    Light3Tech = m_FX->GetTechniqueByName("Light3");
-
-    Light0TexTech = m_FX->GetTechniqueByName("Light0Tex");
-    Light1TexTech = m_FX->GetTechniqueByName("Light1Tex");
-    Light2TexTech = m_FX->GetTechniqueByName("Light2Tex");
-    Light3TexTech = m_FX->GetTechniqueByName("Light3Tex");
+    Tech = m_FX->GetTechniqueByName("Tech");
 
     WorldViewProj = m_FX->GetVariableByName("gWorldViewProj")->AsMatrix();
     World = m_FX->GetVariableByName("gWorld")->AsMatrix();

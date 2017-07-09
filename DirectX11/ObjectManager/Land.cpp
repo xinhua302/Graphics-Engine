@@ -95,7 +95,7 @@ void Land::Update(float dt)
 void Land::Render()
 {   
     D3DX11_TECHNIQUE_DESC techDesc;
-    Effects::FX->Light3TexTech->GetDesc(&techDesc);
+    Effects::FX->Tech->GetDesc(&techDesc);
     for (UINT p = 0; p < techDesc.Passes; ++p)
     {
         //设置顶点和索引
@@ -118,7 +118,7 @@ void Land::Render()
         Effects::FX->SetDiffuseMap(m_LandeMapSRV);
         Effects::FX->SetTexTransform(XMLoadFloat4x4(&m_TexTransform));
         Effects::FX->SetMaterial(m_LandMat);
-        Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, D3d->GetContext());
+        Effects::FX->Tech->GetPassByIndex(p)->Apply(0, D3d->GetContext());
         float blendFactor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
         D3d->GetContext()->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
         D3d->GetContext()->OMSetDepthStencilState(RenderStates::DrawReflectionDSS, 1);

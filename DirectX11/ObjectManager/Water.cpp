@@ -96,7 +96,7 @@ void Water::Update(float dt)
 void Water::Render()
 {
     D3DX11_TECHNIQUE_DESC techDesc;
-    Effects::FX->Light3TexTech->GetDesc(&techDesc);
+    Effects::FX->Tech->GetDesc(&techDesc);
     for (UINT p = 0; p < techDesc.Passes; ++p)
     {
         //设置顶点和索引
@@ -133,7 +133,7 @@ void Water::Render()
         }
         
 
-        Effects::FX->Light3TexTech->GetPassByIndex(p)->Apply(0, D3d->GetContext());
+        Effects::FX->Tech->GetPassByIndex(p)->Apply(0, D3d->GetContext());
         D3d->GetContext()->DrawIndexed(m_WaterCount, 0, 0);
         D3d->GetContext()->OMSetBlendState(0, blendFactor, 0xffffffff);
         D3d->GetContext()->OMSetDepthStencilState(nullptr, 0);

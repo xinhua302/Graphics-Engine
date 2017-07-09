@@ -52,9 +52,6 @@
     <Filter Include="Resource\FX">
       <UniqueIdentifier>{4edf3046-dced-48ea-9729-8a1c2e4d82d5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource\Model">
-      <UniqueIdentifier>{6193a094-a50f-4921-a331-3256562cc27e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ObjectManager">
       <UniqueIdentifier>{877a17ab-ad46-4579-b074-ac4eb8fe345c}</UniqueIdentifier>
     </Filter>
@@ -100,14 +97,6 @@
     <ClInclude Include="D3dUtility\LightManager.h">
       <Filter>D3dUtility</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Resource\Models\car.txt">
-      <Filter>Resource\Model</Filter>
-    </Text>
-    <Text Include="Resource\Models\skull.txt">
-      <Filter>Resource\Model</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Resource\FX\Basic.fx">
