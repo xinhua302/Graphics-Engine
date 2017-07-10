@@ -14,7 +14,7 @@ void Water::Init()
 {
     //ˮ
     GeometryGenerator::MeshData mesh;
-    GeometryGenerator::CreateGrid(mesh, 10.0f, 10.0f, 10, 10);
+    GeometryGenerator::CreateGrid(mesh, 30.0f, 30.0f, 30, 30);
     //ˮ
     int waterVBCount = mesh.Vertices.size();
     std::vector<Vertex::Basic32> landVB(waterVBCount);
@@ -75,10 +75,10 @@ void Water::Clear()
 
 void Water::Update(float dt)
 {
-    m_WaterOffset.y += dt * 0.05f;
-    m_WaterOffset.x += dt * 0.1f;
+    m_WaterOffset.y += dt * 0.01f;
+    m_WaterOffset.x += dt * 0.02f;
     XMMATRIX waterOffset = XMMatrixTranslation(m_WaterOffset.x, m_WaterOffset.y, 0.0f);
-    XMMATRIX waterScale = XMMatrixScaling(1.0f, 1.0f, 0.0f);
+    XMMATRIX waterScale = XMMatrixScaling(10.0f, 10.0f, 0.0f);
     XMStoreFloat4x4(&m_TexTransform, waterOffset * waterScale);
 }
 

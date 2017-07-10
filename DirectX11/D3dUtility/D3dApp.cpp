@@ -322,8 +322,8 @@ bool D3dApp::Render()
 
 	//设置雾效
 	Effects::FX->SetFogColor(Colors::Silver);
-	Effects::FX->SetFogStart(5.0f);
-	Effects::FX->SetFogRange(40.0f);
+	Effects::FX->SetFogStart(15.0f);
+	Effects::FX->SetFogRange(100.0f);
 
     //渲染对象
     ObjectManager::Render();

@@ -14,7 +14,7 @@ void Land::Init()
 {
     //地形
     GeometryGenerator::MeshData mesh;
-    GeometryGenerator::CreateGrid(mesh, 10.0f, 10.0f, 10, 10);
+    GeometryGenerator::CreateGrid(mesh, 30.0f, 30.0f, 30, 30);
     //地形顶点
     int landVBCount = mesh.Vertices.size();
     std::vector<Vertex::Basic32> landVB(landVBCount);
