@@ -12,34 +12,44 @@ Water::~Water()
 
 void Water::Init()
 {
+    m_Wave.Init(50, 50, 0.5f, 0.03f, 5.0f, 0.3f);
     //水
-    GeometryGenerator::MeshData mesh;
-    GeometryGenerator::CreateGrid(mesh, 30.0f, 30.0f, 30, 30);
-    //水
-    int waterVBCount = mesh.Vertices.size();
+    int waterVBCount = m_Wave.GetVertexCount();
     std::vector<Vertex::Basic32> landVB(waterVBCount);
     for (int i = 0; i < waterVBCount; i++)
     {
-        landVB[i].Pos = mesh.Vertices[i].Position;
-        landVB[i].Normal = mesh.Vertices[i].Normal;
-        landVB[i].Tex = mesh.Vertices[i].TexC;
+        landVB[i].Pos = m_Wave[i];
+        landVB[i].Normal = m_Wave.Normal(i);
+        landVB[i].Tex.x = 0.5f + m_Wave[i].x / m_Wave.GetWidth();
+        landVB[i].Tex.y = 0.5f - m_Wave[i].z / m_Wave.GetDepth();
     }
     D3D11_BUFFER_DESC vLandbd;
-    vLandbd.Usage = D3D11_USAGE_IMMUTABLE;
+    vLandbd.Usage = D3D11_USAGE_DYNAMIC;
     vLandbd.ByteWidth = sizeof(Vertex::Basic32) * waterVBCount;
     vLandbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    vLandbd.CPUAccessFlags = 0;
+    vLandbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
     vLandbd.MiscFlags = 0;
     D3D11_SUBRESOURCE_DATA vLandInitData;
     vLandInitData.pSysMem = &landVB[0];
     HR(D3d->GetDevice()->CreateBuffer(&vLandbd, &vLandInitData, &m_pWaterVB));
 
     //索引
-    int landIBCount = mesh.Indices.size();
+    int landIBCount = m_Wave.GetTriangleCount() * 3;
     std::vector<UINT> landIB(landIBCount);
-    for (int i = 0; i < landIBCount; i++)
+    int index = 0;
+    int m = m_Wave.GetVertexCountX();
+    int n = m_Wave.GetVertexCountZ();
+    for (int i = 0; i < n-1; i++)
     {
-        landIB[i] = mesh.Indices[i];
+        for (int j = 0; j < m-1; j++)
+        {
+            landIB[index++] =  i * m + j;
+            landIB[index++] = i * m + j+1;
+            landIB[index++] = (i + 1) * m + j;
+            landIB[index++] =  (i + 1) * m + j;
+            landIB[index++] = i * m + j + 1;
+            landIB[index++] = (i + 1) * m + j + 1;
+        }
     }
 
     D3D11_BUFFER_DESC iLandbd;
@@ -56,7 +66,7 @@ void Water::Init()
 
     //载入草地的纹理贴图
     HR(D3DX11CreateShaderResourceViewFromFile(D3d->GetDevice(),
-        L"Resource/Textures/water1.dds", 0, 0, &m_WaterMapSRV, 0));
+        L"Resource/Textures/water2.dds", 0, 0, &m_WaterMapSRV, 0));
 
     XMMATRIX world = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
     XMStoreFloat4x4(&m_World, world);
@@ -78,8 +88,36 @@ void Water::Update(float dt)
     m_WaterOffset.y += dt * 0.01f;
     m_WaterOffset.x += dt * 0.02f;
     XMMATRIX waterOffset = XMMatrixTranslation(m_WaterOffset.x, m_WaterOffset.y, 0.0f);
-    XMMATRIX waterScale = XMMatrixScaling(10.0f, 10.0f, 0.0f);
+    XMMATRIX waterScale = XMMatrixScaling(5.0f, 5.0f, 0.0f);
     XMStoreFloat4x4(&m_TexTransform, waterOffset * waterScale);
+
+    //随机
+    static float t = 0.0f;
+    t += dt;
+    if (t > 5.0f)
+    {
+        DWORD i = 10 + rand() % (m_Wave.GetVertexCountX() - 30);
+        DWORD j = 10 + rand() % (m_Wave.GetVertexCountZ() - 30);
+
+        float r = MathHelper::RandF(0.7f, 0.8f);
+        m_Wave.Disturb(i, j, r);
+        t = 0.0f;
+    }
+    
+
+    m_Wave.Update(dt);
+    D3D11_MAPPED_SUBRESOURCE mappedData;
+    HR(D3d->GetContext()->Map(m_pWaterVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData));
+    Vertex::Basic32* v = reinterpret_cast<Vertex::Basic32*>(mappedData.pData);
+    for (UINT i = 0; i < m_Wave.GetVertexCount(); i++)
+    {
+        v[i].Pos = m_Wave[i];
+        v[i].Normal = m_Wave.Normal(i);
+        v[i].Tex.x = 0.5f + m_Wave[i].x / m_Wave.GetWidth();
+        v[i].Tex.y = 0.5f - m_Wave[i].z / m_Wave.GetDepth();
+    }
+
+    D3d->GetContext()->Unmap(m_pWaterVB, 0);
 }
 
 void Water::Render()

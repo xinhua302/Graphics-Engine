@@ -163,6 +163,7 @@
     <ClCompile Include="D3dUtility\MathHelper.cpp" />
     <ClCompile Include="D3dUtility\RenderStates.cpp" />
     <ClCompile Include="D3dUtility\Vertex.cpp" />
+    <ClCompile Include="D3dUtility\Wave.cpp" />
     <ClCompile Include="ObjectManager\BaseObject.cpp" />
     <ClCompile Include="ObjectManager\Box.cpp" />
     <ClCompile Include="ObjectManager\Land.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="D3dUtility\MathHelper.h" />
     <ClInclude Include="D3dUtility\RenderStates.h" />
     <ClInclude Include="D3dUtility\Vertex.h" />
+    <ClInclude Include="D3dUtility\Wave.h" />
     <ClInclude Include="ObjectManager\BaseObject.h" />
     <ClInclude Include="ObjectManager\Box.h" />
     <ClInclude Include="ObjectManager\Land.h" />

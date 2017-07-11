@@ -1,6 +1,8 @@
 #ifndef __WATER_H
 #define __WATER_H
 #include "BaseObject.h"
+#include "../D3dUtility/Wave.h"
+
 class Water:public Object
 {
 public:
@@ -27,5 +29,7 @@ private:
     XMFLOAT2 m_WaterOffset;
 
     Material m_WaterMat;
+
+    Wave m_Wave;
 };
 #endif
