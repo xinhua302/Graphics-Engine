@@ -214,7 +214,7 @@ void Box::Render()
             LightManager::Light[i].Direction = oldLightDirections[i];
         }
     }
-    D3d->GetContext()->RSSetState(nullptr);
+    D3d->GetContext()->RSSetState(RenderStates::DefaultRS);
     D3d->GetContext()->OMSetDepthStencilState(nullptr, 0);
 	D3d->GetContext()->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
 }

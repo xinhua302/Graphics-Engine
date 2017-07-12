@@ -1,5 +1,6 @@
 #include "RenderStates.h"
 
+ID3D11RasterizerState* RenderStates::DefaultRS = nullptr;
 ID3D11RasterizerState* RenderStates::WireframeRS = nullptr;
 ID3D11RasterizerState* RenderStates::NoCullRS = nullptr;
 ID3D11RasterizerState* RenderStates::CullClockwiseRS = nullptr;
@@ -14,6 +15,16 @@ ID3D11DepthStencilState* RenderStates::NoDoubleBlendDSS;
 
 void RenderStates::InitAll(ID3D11Device* device)
 {
+	//默认模式
+	D3D11_RASTERIZER_DESC defaultDesc;
+	ZeroMemory(&defaultDesc, sizeof(D3D11_RASTERIZER_DESC));
+	defaultDesc.FillMode = D3D11_FILL_SOLID;
+	defaultDesc.CullMode = D3D11_CULL_BACK;
+	defaultDesc.FrontCounterClockwise = false;
+	defaultDesc.DepthClipEnable = true;
+
+	HR(device->CreateRasterizerState(&defaultDesc, &DefaultRS));
+
     //线框模式
     D3D11_RASTERIZER_DESC wireframeDesc;
     ZeroMemory(&wireframeDesc, sizeof(D3D11_RASTERIZER_DESC));
@@ -152,8 +163,17 @@ void RenderStates::InitAll(ID3D11Device* device)
 
 void RenderStates::DestroyAll()
 {
+    ReleaseCOM(DefaultRS);
     ReleaseCOM(WireframeRS);
     ReleaseCOM(NoCullRS);
+
     ReleaseCOM(AlphaToCoverageBS);
     ReleaseCOM(TransparentBS);
+    ReleaseCOM(NoRenderTargetWritesBS);
+
+    ReleaseCOM(MarkMirrorDSS);
+    ReleaseCOM(DrawReflectionDSS);
+    ReleaseCOM(NoDoubleBlendDSS);
 }
+
+

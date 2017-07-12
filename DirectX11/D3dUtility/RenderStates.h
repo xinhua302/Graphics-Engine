@@ -10,6 +10,7 @@ public:
     static void DestroyAll();
 
     //¹âÕ¤»¯×´Ì¬
+	static ID3D11RasterizerState* DefaultRS;
     static ID3D11RasterizerState* WireframeRS;
     static ID3D11RasterizerState* NoCullRS;
     static ID3D11RasterizerState* CullClockwiseRS;

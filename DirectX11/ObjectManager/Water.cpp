@@ -91,6 +91,11 @@ void Water::Update(float dt)
     XMMATRIX waterScale = XMMatrixScaling(5.0f, 5.0f, 0.0f);
     XMStoreFloat4x4(&m_TexTransform, waterOffset * waterScale);
 
+	if (m_Mode == 0)
+	{
+		return;
+	}
+
     //Ëæ»ú
     static float t = 0.0f;
     t += dt;
