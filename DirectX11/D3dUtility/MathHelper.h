@@ -32,21 +32,21 @@ public:
        return r * 180.0f / Pi;
     }
 
-    // 获取插值噪声  
-    static float PerlinNoise(float x, float y)
+    static float PerlinNoise(float x, float y)    // 最终调用：根据(x,y)获得其对应的PerlinNoise值  
     {
-        int integer_X = static_cast<int>(x);
-        float  fractional_X = x - integer_X;
-        int integer_Y = static_cast<int>(y);
-        float fractional_Y = y - integer_Y;
-        float v1 = SmoothedNoise(integer_X, integer_Y);
-        float v2 = SmoothedNoise(integer_X + 1, integer_Y);
-        float v3 = SmoothedNoise(integer_X, integer_Y + 1);
-        float v4 = SmoothedNoise(integer_X + 1, integer_Y + 1);
-        float i1 = CosineInterpolate(v1, v2, fractional_X);
-        float i2 = CosineInterpolate(v3, v4, fractional_X);
-        return CosineInterpolate(i1, i2, fractional_Y);
+        float total = 0;
+        float p = 0.05f;
+        int n = 2;
+        for (int i = 0; i < n; i++)
+        {
+            float frequency = pow(2.0f, i);
+            float amplitude = pow(p, i);
+            total = total + InterpolatedNoise(x * frequency, y * frequency) * amplitude;
+        }
+
+        return total;
     }
+
 
 private:
     // 根据(x,y)获取一个初步噪声值  
@@ -64,6 +64,22 @@ private:
         float sides = (Noise(x - 1, y) + Noise(x + 1, y) + Noise(x, y - 1) + Noise(x, y + 1)) / 8;
         float center = Noise(x, y) / 4;
         return corners + sides + center;
+    }
+
+    // 获取插值噪声  
+    static float InterpolatedNoise(float x, float y)
+    {
+        int integer_X = static_cast<int>(x);
+        float  fractional_X = x - integer_X;
+        int integer_Y = static_cast<int>(y);
+        float fractional_Y = y - integer_Y;
+        float v1 = SmoothedNoise(integer_X, integer_Y);
+        float v2 = SmoothedNoise(integer_X + 1, integer_Y);
+        float v3 = SmoothedNoise(integer_X, integer_Y + 1);
+        float v4 = SmoothedNoise(integer_X + 1, integer_Y + 1);
+        float i1 = CosineInterpolate(v1, v2, fractional_X);
+        float i2 = CosineInterpolate(v3, v4, fractional_X);
+        return CosineInterpolate(i1, i2, fractional_Y);
     }
 
 
