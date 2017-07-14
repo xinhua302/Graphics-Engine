@@ -33,7 +33,7 @@ public:
 
     void Disturb(UINT i, UINT j, float magnitude);
 private:
-
+    float GetHeight(float x, float z, float dt);
 
 
     UINT m_VertexCountX;

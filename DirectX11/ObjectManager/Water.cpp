@@ -156,7 +156,7 @@ void Water::Render()
         if (m_Mode == 1)
         {
             D3d->GetContext()->OMSetBlendState(RenderStates::TransparentBS, blendFactor, 0xffffffff);
-            D3d->GetContext()->OMSetDepthStencilState(nullptr, 0);
+            D3d->GetContext()->OMSetDepthStencilState(RenderStates::NoDoubleBlendDSS, 1);
         }
         else
         {

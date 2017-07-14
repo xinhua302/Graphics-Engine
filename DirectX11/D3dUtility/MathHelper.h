@@ -13,13 +13,27 @@ public:
         return (float)(rand()) / (float)RAND_MAX;
     }
 
-    //[a, b).
+    // 余弦插值  
+    static float CosineInterpolate(float a, float b, float x)
+    {
+        float ft = x * 3.1415927f;
+        float f = (1 - cos(ft)) * 0.5f;
+        return a*(1 - f) + b*f;
+    }
+    //[a, b)
+
     static float RandF(float a, float b)
     {
         return a + RandF()*(b - a);
     }
 
-    static float PerlinNoise(float x, float y)   // 获取插值噪声  
+    static float Rad2Deg(float r)
+    {
+       return r * 180.0f / Pi;
+    }
+
+    // 获取插值噪声  
+    static float PerlinNoise(float x, float y)
     {
         int integer_X = static_cast<int>(x);
         float  fractional_X = x - integer_X;
@@ -35,14 +49,16 @@ public:
     }
 
 private:
-    static float Noise(int x, int y)    // 根据(x,y)获取一个初步噪声值  
+    // 根据(x,y)获取一个初步噪声值  
+    static float Noise(int x, int y)    
     {
         int n = x + y * 57;
         n = (n << 13) ^ n;
         return (1.0f - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0f);
     }
 
-    static float SmoothedNoise(int x, int y)   //光滑噪声  
+    //光滑噪声  
+    static float SmoothedNoise(int x, int y)   
     {
         float corners = (Noise(x - 1, y - 1) + Noise(x + 1, y - 1) + Noise(x - 1, y + 1) + Noise(x + 1, y + 1)) / 16;
         float sides = (Noise(x - 1, y) + Noise(x + 1, y) + Noise(x, y - 1) + Noise(x, y + 1)) / 8;
@@ -50,12 +66,7 @@ private:
         return corners + sides + center;
     }
 
-    static float CosineInterpolate(float a, float b, float x)  // 余弦插值  
-    {
-        float ft = x * 3.1415927f;
-        float f = (1 - cos(ft)) * 0.5f;
-        return a*(1 - f) + b*f;
-    }
+
 };
 
 
