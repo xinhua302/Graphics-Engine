@@ -156,5 +156,5 @@ float Wave::GetHeight(float x, float z, float dt)
 {
     float waveFrequency = 10.0f;
     float waveHeight = 1.5f;
-    return MathHelper::PerlinNoise(x + dt, z + dt) * waveHeight;
+    return MathHelper::PerlinNoise(x + dt * 5.0f, z + dt * 5.0f) * waveHeight;
 }
