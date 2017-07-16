@@ -46,7 +46,7 @@ void GeometryGenerator::CreateGrid(MeshData &meshData, float width, float depth,
 		}
 	}
 
-    for (UINT i = 0; i < triangleCount; i++)
+    for (int i = 0; i < triangleCount; i++)
     {
         XMFLOAT3 p1 = meshData.Vertices[meshData.Indices[i * 3]].Position;
         XMFLOAT3 p2 = meshData.Vertices[meshData.Indices[i * 3 + 1]].Position;

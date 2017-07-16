@@ -107,13 +107,13 @@ void Wave::Update(float dt)
     {
         for (UINT j = 1; j < m_VertexCountX - 1; j++)
         {
-            /*m_Pre[i * m_VertexCountX + j].y = (m_Cur[(i - 1) * m_VertexCountX + j].y +
+            m_Pre[i * m_VertexCountX + j].y = (m_Cur[(i - 1) * m_VertexCountX + j].y +
                 m_Cur[(i + 1) * m_VertexCountX + j].y +
                 m_Cur[i * m_VertexCountX + (j - 1)].y +
                 m_Cur[i * m_VertexCountX + (j + 1)].y) * m_K3 +
                 m_Pre[i * m_VertexCountX + j].y * m_K1 +
-                m_Cur[i * m_VertexCountX + j].y * m_K2;*/
-            m_Pre[i * m_VertexCountX + j].y = GetHeight(m_Cur[i * m_VertexCountX + j].x + GetWidth(), m_Cur[i * m_VertexCountX + j].z + GetDepth(), t2);
+                m_Cur[i * m_VertexCountX + j].y * m_K2;
+            /*m_Pre[i * m_VertexCountX + j].y = GetHeight(m_Cur[i * m_VertexCountX + j].x + GetWidth(), m_Cur[i * m_VertexCountX + j].z + GetDepth(), t2);*/
         }
     }
     std::swap(m_Pre, m_Cur);
@@ -154,7 +154,7 @@ void Wave::Disturb(UINT i, UINT j, float magnitude)
 
 float Wave::GetHeight(float x, float z, float dt)
 {
-    float waveFrequency = 10.0f;
-    float waveHeight = 1.2f;
-    return MathHelper::PerlinNoise(x + dt * 10.0f, z + dt * 10.0f) * waveHeight;
+    float waveFrequency = 0.2f;
+    float waveHeight = 1.9f;
+    return MathHelper::PerlinNoise((x + dt*10.0f) * waveFrequency, (z) * waveFrequency) * waveHeight;
 }

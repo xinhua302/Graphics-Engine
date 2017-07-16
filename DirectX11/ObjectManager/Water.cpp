@@ -85,29 +85,29 @@ void Water::Clear()
 
 void Water::Update(float dt)
 {
-    m_WaterOffset.y -= dt * 0.01f;
-    m_WaterOffset.x -= dt * 0.02f;
+    m_WaterOffset.y += dt * 0.01f;
+    m_WaterOffset.x += dt * 0.02f;
     XMMATRIX waterOffset = XMMatrixTranslation(m_WaterOffset.x, m_WaterOffset.y, 0.0f);
     XMMATRIX waterScale = XMMatrixScaling(5.0f, 5.0f, 0.0f);
     XMStoreFloat4x4(&m_TexTransform, waterOffset * waterScale);
-
+    
 	if (m_Mode == 0)
 	{
 		return;
 	}
 
-    ////Ëæ»ú
-    //static float t = 0.0f;
-    //t += dt;
-    //if (t > 5.0f)
-    //{
-    //    DWORD i = 10 + rand() % (m_Wave.GetVertexCountX() - 30);
-    //    DWORD j = 10 + rand() % (m_Wave.GetVertexCountZ() - 30);
+    //Ëæ»ú
+    static float t = 0.0f;
+    t += dt;
+    if (t > 1.0f)
+    {
+        DWORD i = 10 + rand() % (m_Wave.GetVertexCountX() - 10);
+        DWORD j = 10 + rand() % (m_Wave.GetVertexCountZ() - 10);
 
-    //    float r = MathHelper::RandF(0.7f, 0.8f);
-    //    m_Wave.Disturb(i, j, r);
-    //    t = 0.0f;
-    //}
+        float r = MathHelper::RandF(0.7f, 1.4f);
+        m_Wave.Disturb(i, j, r);
+        t = 0.0f;
+    }
     
 
     m_Wave.Update(dt);
