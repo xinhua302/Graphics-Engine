@@ -14,7 +14,7 @@ void Land::Init()
 {
     //地形
     GeometryGenerator::MeshData mesh;
-    GeometryGenerator::CreateGrid(mesh, 30.0f, 30.0f, 30, 30);
+    GeometryGenerator::CreateGrid(mesh, 80.0f, 80.0f, 80, 80, 0.1f, 50.0f);
     //地形顶点
     int landVBCount = mesh.Vertices.size();
     std::vector<Vertex::Basic32> landVB(landVBCount);
@@ -109,9 +109,9 @@ void Land::Render()
         Effects::FX->SetMaterial(m_LandMat);
         Effects::FX->Tech->GetPassByIndex(p)->Apply(0, D3d->GetContext());
         float blendFactor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-        D3d->GetContext()->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
-        D3d->GetContext()->OMSetDepthStencilState(RenderStates::DrawReflectionDSS, 1);
+        //D3d->GetContext()->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
+        //D3d->GetContext()->OMSetDepthStencilState(RenderStates::DrawReflectionDSS, 1);
         D3d->GetContext()->DrawIndexed(m_LandCount, 0, 0);
-        D3d->GetContext()->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
+        //D3d->GetContext()->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
     }
 }

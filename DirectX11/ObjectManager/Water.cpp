@@ -12,7 +12,7 @@ Water::~Water()
 
 void Water::Init()
 {
-    m_Wave.Init(50, 50, 0.5f, 0.03f, 5.0f, 0.3f);
+    m_Wave.Init(80, 80, 1.0f, 0.03f, 5.0f, 0.3f);
     //ˮ
     int waterVBCount = m_Wave.GetVertexCount();
     std::vector<Vertex::Basic32> landVB(waterVBCount);

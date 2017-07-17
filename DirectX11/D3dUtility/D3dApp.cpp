@@ -256,7 +256,7 @@ bool D3dApp::Init()
     OnResize();
 
     //设置相机
-    m_Camera.SetPosition(0.0f, 2.0f, -15.0f);
+    m_Camera.SetPosition(5.0f, 3.0f, -19.0f);
     m_Camera.SetLens(0.25f*MathHelper::Pi, GetAspectRatio(), 1.0f, 1000.0f);
 
     //创建对象管理器
@@ -275,8 +275,8 @@ bool D3dApp::Init()
     LightManager::InitAll();
 
     ObjectManager::CreateObject("Box");
-    ObjectManager::CreateObject("MarkWater");
     ObjectManager::CreateObject("Land");
+    ObjectManager::CreateObject("MarkWater");
     ObjectManager::CreateObject("BoxReflection");
     ObjectManager::CreateObject("Water");
 	ObjectManager::CreateObject("BoxShadow");

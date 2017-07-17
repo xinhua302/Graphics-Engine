@@ -111,7 +111,7 @@ void Box::Init()
     XMMATRIX I = XMMatrixIdentity();
     XMStoreFloat4x4(&m_TexTransform, I);
 
-    XMMATRIX world = XMMatrixTranslation(0.0f, 2.0f, 0.0f);
+    XMMATRIX world = XMMatrixTranslation(0.0f, 2.0f, 15.0f);
     XMStoreFloat4x4(&m_World, world);
 
     m_BoxMat.Ambient = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);

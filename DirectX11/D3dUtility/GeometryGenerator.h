@@ -31,7 +31,7 @@ public:
 		std::vector<UINT> Indices;
 	};
 
-	static void CreateGrid(MeshData &mesh, float width, float depth, UINT wVertexCount, UINT dVertexCount);
+    static void CreateGrid(MeshData &mesh, float width, float depth, UINT wVertexCount, UINT dVertexCount, float frequency, float height);
 
 };
 #endif
