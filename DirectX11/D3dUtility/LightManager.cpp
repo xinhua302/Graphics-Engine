@@ -1,4 +1,5 @@
 #include "LightManager.h"
+#include "D3dApp.h"
 
 void LightManager::InitAll()
 {
@@ -31,7 +32,7 @@ void LightManager::CreateLight()
 void LightManager::Apply()
 {
     //¹Û²ìµÄÎ»ÖÃ
-    XMFLOAT3 eyePosW = XMFLOAT3(-2.3f, 5.06f, -19.0f);
+	XMFLOAT3 eyePosW = D3d->GetCamera().GetPosition();
     Effects::FX->SetDirLights(Light);
     Effects::FX->SetEyePosW(eyePosW);
 }

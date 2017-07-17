@@ -7,6 +7,9 @@ cbuffer cbPerFrame
     DirectionalLight gDirLights[3];
     //视点
     float3 gEyePosW;
+	float gFogStart;
+	float gFogRange;
+	float4 gFogColor;
 };
 
 //对象常量缓冲
@@ -107,7 +110,14 @@ float4 PS(VertexOut vOut):SV_Target
     }
 
     litColor = texColor*(ambient + diffuse) + spec;
-    litColor.a = gMaterial.Diffuse.a * texColor.a;
+
+	//雾效
+	float fogLerp = saturate((distToEye - gFogStart) / gFogRange);
+	litColor = lerp(litColor, gFogColor, fogLerp);
+
+	//Alpha
+	litColor.a = gMaterial.Diffuse.a * texColor.a;
+
     return litColor;
 }
 

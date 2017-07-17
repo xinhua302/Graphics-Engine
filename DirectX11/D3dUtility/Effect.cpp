@@ -24,6 +24,9 @@ Effect::Effect(ID3D11Device* device, const std::wstring& filename)
     WorldInvTranspose = m_FX->GetVariableByName("gWorldInvTranspose")->AsMatrix();
     TexTransform = m_FX->GetVariableByName("gTexTransform")->AsMatrix();
     EyePosW = m_FX->GetVariableByName("gEyePosW")->AsVector();
+	FogColor = m_FX->GetVariableByName("gFogColor")->AsVector();
+	FogStart = m_FX->GetVariableByName("gFogStart")->AsScalar();
+	FogRange = m_FX->GetVariableByName("gFogRange")->AsScalar();
     DirLights = m_FX->GetVariableByName("gDirLights");
     Mat = m_FX->GetVariableByName("gMaterial");
     DiffuseMap = m_FX->GetVariableByName("gDiffuseMap")->AsShaderResource();
