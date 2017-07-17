@@ -85,8 +85,8 @@ void Water::Clear()
 
 void Water::Update(float dt)
 {
-    m_WaterOffset.y += dt * 0.01f;
-    m_WaterOffset.x += dt * 0.02f;
+    m_WaterOffset.y -= dt * 0.01f;
+    m_WaterOffset.x -= dt * 0.02f;
     XMMATRIX waterOffset = XMMatrixTranslation(m_WaterOffset.x, m_WaterOffset.y, 0.0f);
     XMMATRIX waterScale = XMMatrixScaling(5.0f, 5.0f, 0.0f);
     XMStoreFloat4x4(&m_TexTransform, waterOffset * waterScale);

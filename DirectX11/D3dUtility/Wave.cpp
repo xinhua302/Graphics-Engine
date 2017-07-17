@@ -155,6 +155,6 @@ void Wave::Disturb(UINT i, UINT j, float magnitude)
 float Wave::GetHeight(float x, float z, float dt)
 {
     float waveFrequency = 10.0f;
-    float waveHeight = 1.5f;
-    return MathHelper::PerlinNoise(x + dt * 5.0f, z + dt * 5.0f) * waveHeight;
+    float waveHeight = 1.2f;
+    return MathHelper::PerlinNoise(x + dt * 10.0f, z + dt * 10.0f) * waveHeight;
 }
