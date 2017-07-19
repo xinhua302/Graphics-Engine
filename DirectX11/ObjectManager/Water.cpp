@@ -96,18 +96,18 @@ void Water::Update(float dt)
 		return;
 	}
 
-    //Ëæ»ú
-    static float t = 0.0f;
-    t += dt;
-    if (t > 5.0f)
-    {
-        DWORD i = 10 + rand() % (m_Wave.GetVertexCountX() - 30);
-        DWORD j = 10 + rand() % (m_Wave.GetVertexCountZ() - 30);
+    ////Ëæ»ú
+    //static float t = 0.0f;
+    //t += dt;
+    //if (t > 5.0f)
+    //{
+    //    DWORD i = 10 + rand() % (m_Wave.GetVertexCountX() - 30);
+    //    DWORD j = 10 + rand() % (m_Wave.GetVertexCountZ() - 30);
 
-        float r = MathHelper::RandF(0.7f, 0.8f);
-        m_Wave.Disturb(i, j, r);
-        t = 0.0f;
-    }
+    //    float r = MathHelper::RandF(0.7f, 0.8f);
+    //    m_Wave.Disturb(i, j, r);
+    //    t = 0.0f;
+    //}
     
 
     m_Wave.Update(dt);

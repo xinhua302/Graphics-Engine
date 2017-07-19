@@ -47,6 +47,9 @@
     <ClCompile Include="D3dUtility\Wave.cpp">
       <Filter>D3dUtility</Filter>
     </ClCompile>
+    <ClCompile Include="D3dUtility\FPS.cpp">
+      <Filter>D3dUtility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="D3dUtility">
@@ -107,6 +110,9 @@
       <Filter>D3dUtility</Filter>
     </ClInclude>
     <ClInclude Include="D3dUtility\Wave.h">
+      <Filter>D3dUtility</Filter>
+    </ClInclude>
+    <ClInclude Include="D3dUtility\FPS.h">
       <Filter>D3dUtility</Filter>
     </ClInclude>
   </ItemGroup>

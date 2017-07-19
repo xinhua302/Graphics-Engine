@@ -279,7 +279,7 @@ bool D3dApp::Init()
     ObjectManager::CreateObject("MarkWater");
     ObjectManager::CreateObject("BoxReflection");
     ObjectManager::CreateObject("Water");
-	ObjectManager::CreateObject("BoxShadow");
+    ObjectManager::CreateObject("BoxShadow");
 
     LightManager::CreateLight();
     return true;

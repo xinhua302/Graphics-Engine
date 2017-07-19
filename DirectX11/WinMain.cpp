@@ -118,6 +118,12 @@ int EnterMsgLoop(bool(*ptr_display)(float timeDelta))
 			ptr_display(timeDelta);
 
 			lastTime = currTime;
+            
+            //º∆À„FPS
+            UINT fps = FPS::CalculateFPS(timeDelta);
+            std::wostringstream outs;
+            outs << "DirectX11 " << "FPS:" << fps;
+            SetWindowText(g_hWnd, outs.str().c_str());
 		}
 	}
 	return msg.wParam;

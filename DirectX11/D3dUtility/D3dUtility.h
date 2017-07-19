@@ -15,6 +15,7 @@
 #include "GeometryGenerator.h"
 #include "LightHelper.h"
 #include "Camera.h"
+#include "FPS.h"
 
 namespace Colors
 {

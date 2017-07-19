@@ -157,6 +157,7 @@
     <ClCompile Include="D3dUtility\D3dApp.cpp" />
     <ClCompile Include="D3dUtility\D3dUtility.cpp" />
     <ClCompile Include="D3dUtility\Effect.cpp" />
+    <ClCompile Include="D3dUtility\FPS.cpp" />
     <ClCompile Include="D3dUtility\GeometryGenerator.cpp" />
     <ClCompile Include="D3dUtility\LightHelper.cpp" />
     <ClCompile Include="D3dUtility\LightManager.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="D3dUtility\D3dApp.h" />
     <ClInclude Include="D3dUtility\D3dUtility.h" />
     <ClInclude Include="D3dUtility\Effect.h" />
+    <ClInclude Include="D3dUtility\FPS.h" />
     <ClInclude Include="D3dUtility\GeometryGenerator.h" />
     <ClInclude Include="D3dUtility\LightHelper.h" />
     <ClInclude Include="D3dUtility\LightManager.h" />
