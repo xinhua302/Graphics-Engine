@@ -168,6 +168,7 @@
     <ClCompile Include="ObjectManager\BaseObject.cpp" />
     <ClCompile Include="ObjectManager\Box.cpp" />
     <ClCompile Include="ObjectManager\Land.cpp" />
+    <ClCompile Include="ObjectManager\TreeSprite.cpp" />
     <ClCompile Include="ObjectManager\Water.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
@@ -187,6 +188,7 @@
     <ClInclude Include="ObjectManager\BaseObject.h" />
     <ClInclude Include="ObjectManager\Box.h" />
     <ClInclude Include="ObjectManager\Land.h" />
+    <ClInclude Include="ObjectManager\TreeSprite.h" />
     <ClInclude Include="ObjectManager\Water.h" />
     <ClInclude Include="WinMain.h" />
   </ItemGroup>
@@ -198,6 +200,14 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
     </CustomBuild>
     <CustomBuild Include="Resource\FX\LightHelper.fx">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Resource\FX\TreeSprite.fx">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>

@@ -2,6 +2,7 @@
 #include "Land.h"
 #include "Box.h"
 #include "Water.h"
+#include "TreeSprite.h"
 
 Object::Object(UINT id)
 {
@@ -95,6 +96,10 @@ void ObjectManager::CreateObject(string name)
     else if (name == "MarkWater")
     {
         object = new Water(Id, 0);
+    }
+    else if (name == "TreeSprite")
+    {
+        object = new TreeSprite(Id);
     }
     ObjectMap.insert(make_pair(Id, object));
     Id++;

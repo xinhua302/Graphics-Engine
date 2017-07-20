@@ -276,10 +276,12 @@ bool D3dApp::Init()
 
     ObjectManager::CreateObject("Box");
     ObjectManager::CreateObject("Land");
+    ObjectManager::CreateObject("TreeSprite");
     ObjectManager::CreateObject("MarkWater");
     ObjectManager::CreateObject("BoxReflection");
     ObjectManager::CreateObject("Water");
     ObjectManager::CreateObject("BoxShadow");
+
 
     LightManager::CreateLight();
     return true;

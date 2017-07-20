@@ -61,7 +61,7 @@ void Land::Init()
     XMMATRIX grassTexScale = XMMatrixScaling(10.0f, 10.0f, 0.0f);
     XMStoreFloat4x4(&m_TexTransform, grassTexScale);
 
-    XMMATRIX world = XMMatrixTranslation(0.0f, -4.0f, 0.0f);
+    XMMATRIX world = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
     XMStoreFloat4x4(&m_World, world);
 
     m_LandMat.Ambient = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);

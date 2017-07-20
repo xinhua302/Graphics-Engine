@@ -50,6 +50,9 @@
     <ClCompile Include="D3dUtility\FPS.cpp">
       <Filter>D3dUtility</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectManager\TreeSprite.cpp">
+      <Filter>ObjectManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="D3dUtility">
@@ -115,12 +118,18 @@
     <ClInclude Include="D3dUtility\FPS.h">
       <Filter>D3dUtility</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectManager\TreeSprite.h">
+      <Filter>ObjectManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Resource\FX\Basic.fx">
       <Filter>Resource\FX</Filter>
     </CustomBuild>
     <CustomBuild Include="Resource\FX\LightHelper.fx">
+      <Filter>Resource\FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Resource\FX\TreeSprite.fx">
       <Filter>Resource\FX</Filter>
     </CustomBuild>
   </ItemGroup>
