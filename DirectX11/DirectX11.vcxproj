@@ -159,7 +159,6 @@
     <ClCompile Include="D3dUtility\Effect.cpp" />
     <ClCompile Include="D3dUtility\FPS.cpp" />
     <ClCompile Include="D3dUtility\GeometryGenerator.cpp" />
-    <ClCompile Include="D3dUtility\LightHelper.cpp" />
     <ClCompile Include="D3dUtility\LightManager.cpp" />
     <ClCompile Include="D3dUtility\MathHelper.cpp" />
     <ClCompile Include="D3dUtility\RenderStates.cpp" />
@@ -179,7 +178,6 @@
     <ClInclude Include="D3dUtility\Effect.h" />
     <ClInclude Include="D3dUtility\FPS.h" />
     <ClInclude Include="D3dUtility\GeometryGenerator.h" />
-    <ClInclude Include="D3dUtility\LightHelper.h" />
     <ClInclude Include="D3dUtility\LightManager.h" />
     <ClInclude Include="D3dUtility\MathHelper.h" />
     <ClInclude Include="D3dUtility\RenderStates.h" />
@@ -195,13 +193,13 @@
   <ItemGroup>
     <CustomBuild Include="Resource\FX\Basic.fx">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(DXSDK_DIR)Utilities\bin\x86\"fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
     </CustomBuild>
     <CustomBuild Include="Resource\FX\LightHelper.fx">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(DXSDK_DIR)Utilities\bin\x86\"fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
     </CustomBuild>
@@ -209,7 +207,7 @@
   <ItemGroup>
     <CustomBuild Include="Resource\FX\TreeSprite.fx">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(DXSDK_DIR)Utilities\bin\x86\"fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
     </CustomBuild>

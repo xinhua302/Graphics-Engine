@@ -13,7 +13,6 @@
 #include "Vertex.h"
 #include "RenderStates.h"
 #include "GeometryGenerator.h"
-#include "LightHelper.h"
 #include "Camera.h"
 #include "FPS.h"
 

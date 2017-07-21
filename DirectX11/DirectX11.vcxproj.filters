@@ -14,9 +14,6 @@
     <ClCompile Include="D3dUtility\Vertex.cpp">
       <Filter>D3dUtility</Filter>
     </ClCompile>
-    <ClCompile Include="D3dUtility\LightHelper.cpp">
-      <Filter>D3dUtility</Filter>
-    </ClCompile>
     <ClCompile Include="D3dUtility\GeometryGenerator.cpp">
       <Filter>D3dUtility</Filter>
     </ClCompile>
@@ -80,9 +77,6 @@
       <Filter>D3dUtility</Filter>
     </ClInclude>
     <ClInclude Include="D3dUtility\Vertex.h">
-      <Filter>D3dUtility</Filter>
-    </ClInclude>
-    <ClInclude Include="D3dUtility\LightHelper.h">
       <Filter>D3dUtility</Filter>
     </ClInclude>
     <ClInclude Include="D3dUtility\MathHelper.h">

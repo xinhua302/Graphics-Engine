@@ -87,6 +87,7 @@ void GS(point VertexOut gin[1],
     geoOut[1].PosW = gin[0].CenterW + right * halfWidth + up * halfHeight;
     geoOut[2].PosW = gin[0].CenterW - right * halfWidth - up * halfHeight;
     geoOut[3].PosW = gin[0].CenterW - right * halfWidth + up * halfHeight;
+    [unroll]
     for (int i = 0; i < 4; i++)
     {
         geoOut[i].PosH = mul(float4(geoOut[i].PosW, 1.0f), gViewProj);
@@ -118,6 +119,7 @@ float4 PS(GeoOut pin) : SV_Target
     float4 ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
     float4 diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
     float4 spec = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    [unroll]
     for (int i = 0; i < 3; i++)
     {
         float4 A, D, S;

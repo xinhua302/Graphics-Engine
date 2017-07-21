@@ -2,7 +2,7 @@
 #define __EFFECT_H
 #include "D3dUtility.h"
 #include "d3dx11effect.h"
-#include "LightHelper.h"
+#include "LightManager.h"
 
 #pragma region BaseEffect
 class BaseEffect
