@@ -20,6 +20,7 @@
 class D3dHelper
 {
 public:
+    //创建纹理数组
     static ID3D11ShaderResourceView* CreateTexture2DArraySRV(
         ID3D11Device* device, ID3D11DeviceContext* context,
         std::vector<std::wstring>& filenames,

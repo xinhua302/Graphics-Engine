@@ -1,15 +1,12 @@
 #include "D3dUtility.h"
 #include "D3dApp.h"
 
-ID3D11ShaderResourceView* D3dHelper::CreateTexture2DArraySRV(ID3D11Device* device, ID3D11DeviceContext* context, std::vector<std::wstring>& filenames, DXGI_FORMAT format /*= DXGI_FORMAT_FROM_FILE*/, UINT filter /*= D3DX11_FILTER_NONE*/, UINT mipFilter /*= D3DX11_FILTER_LINEAR*/)
+ID3D11ShaderResourceView* D3dHelper::CreateTexture2DArraySRV(ID3D11Device* device, 
+    ID3D11DeviceContext* context,
+    std::vector<std::wstring>& filenames, 
+    DXGI_FORMAT format, UINT filter, 
+    UINT mipFilter)
 {
-    //
-    // Load the texture elements individually from file.  These textures
-    // won't be used by the GPU (0 bind flags), they are just used to 
-    // load the image data from file.  We use the STAGING usage so the
-    // CPU can read the resource.
-    //
-
     UINT size = filenames.size();
 
     std::vector<ID3D11Texture2D*> srcTex(size);
@@ -35,11 +32,6 @@ ID3D11ShaderResourceView* D3dHelper::CreateTexture2DArraySRV(ID3D11Device* devic
             &loadInfo, 0, (ID3D11Resource**)&srcTex[i], 0));
     }
 
-    //
-    // Create the texture array.  Each element in the texture 
-    // array has the same format/dimensions.
-    //
-
     D3D11_TEXTURE2D_DESC texElementDesc;
     srcTex[0]->GetDesc(&texElementDesc);
 
@@ -56,17 +48,12 @@ ID3D11ShaderResourceView* D3dHelper::CreateTexture2DArraySRV(ID3D11Device* devic
     texArrayDesc.CPUAccessFlags = 0;
     texArrayDesc.MiscFlags = 0;
 
-    ID3D11Texture2D* texArray = 0;
+    ID3D11Texture2D* texArray = nullptr;
     HR(device->CreateTexture2D(&texArrayDesc, 0, &texArray));
 
-    //
-    // Copy individual texture elements into texture array.
-    //
 
-    // for each texture element...
     for (UINT texElement = 0; texElement < size; ++texElement)
     {
-        // for each mipmap level...
         for (UINT mipLevel = 0; mipLevel < texElementDesc.MipLevels; ++mipLevel)
         {
             D3D11_MAPPED_SUBRESOURCE mappedTex2D;
@@ -80,9 +67,6 @@ ID3D11ShaderResourceView* D3dHelper::CreateTexture2DArraySRV(ID3D11Device* devic
         }
     }
 
-    //
-    // Create a resource view to the texture array.
-    //
 
     D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
     viewDesc.Format = texArrayDesc.Format;
@@ -92,12 +76,8 @@ ID3D11ShaderResourceView* D3dHelper::CreateTexture2DArraySRV(ID3D11Device* devic
     viewDesc.Texture2DArray.FirstArraySlice = 0;
     viewDesc.Texture2DArray.ArraySize = size;
 
-    ID3D11ShaderResourceView* texArraySRV = 0;
+    ID3D11ShaderResourceView* texArraySRV = nullptr;
     HR(device->CreateShaderResourceView(texArray, &viewDesc, &texArraySRV));
-
-    //
-    // Cleanup--we only need the resource view.
-    //
 
     ReleaseCOM(texArray);
 
