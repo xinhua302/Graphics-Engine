@@ -33,5 +33,7 @@ public:
 
     static void CreateGrid(MeshData &mesh, float width, float depth, UINT wVertexCount, UINT dVertexCount, float frequency, float height);
 
+    static void CreateFullscreenQuad(MeshData& meshData);
+
 };
 #endif

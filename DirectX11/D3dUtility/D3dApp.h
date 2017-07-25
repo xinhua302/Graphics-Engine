@@ -19,6 +19,8 @@ public:
 	void Clear();
     void OnResize();
     float GetAspectRatio();
+    int GetWidth() const;
+    int GetHeight() const;
 
     ID3D11Device* GetDevice() const;
     ID3D11DeviceContext* GetContext() const;

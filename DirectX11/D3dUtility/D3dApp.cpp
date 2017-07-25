@@ -5,6 +5,7 @@
 #include "GeometryGenerator.h"
 #include "../ObjectManager/BaseObject.h"
 #include "LightManager.h"
+#include "BlurFilter.h"
 #include <cassert>
 
 D3dApp * D3dApp::m_pInstance = nullptr;
@@ -274,6 +275,8 @@ bool D3dApp::Init()
     //初始化光照管理器
     LightManager::InitAll();
 
+    BlurFilter::InitAll();
+
     ObjectManager::CreateObject("Box");
     ObjectManager::CreateObject("Land");
     ObjectManager::CreateObject("TreeSprite");
@@ -307,9 +310,11 @@ bool D3dApp::Update(float dt)
 
 bool D3dApp::Render()
 {
+    ID3D11RenderTargetView* renderTargetView = BlurFilter::OffscreenRTV;
     //请屏
     float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, color);
+    m_pImmediateContext->OMSetRenderTargets(1, &renderTargetView, m_pDepthStencilView);
+    m_pImmediateContext->ClearRenderTargetView(renderTargetView, color);
     m_pImmediateContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
     //设置输入布局和拓扑结构
@@ -329,6 +334,8 @@ bool D3dApp::Render()
 
     //渲染对象
     ObjectManager::Render();
+
+    BlurFilter::RenderToTexture(m_pRenderTargetView, m_pDepthStencilView);
 
     HR(m_pSwapChain->Present(0, 0));
 	return true;
@@ -352,4 +359,15 @@ void D3dApp::Clear()
     InputLayouts::DestroyAll();
     RenderStates::DestroyAll();
     LightManager::DestroyAll();
+    BlurFilter::DestroyAll();
+}
+
+int D3dApp::GetWidth() const
+{
+    return m_Width;
+}
+
+int D3dApp::GetHeight() const
+{
+    return m_Height;
 }
