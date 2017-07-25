@@ -5,6 +5,7 @@ Effect::Effect(ID3D11Device* device, const std::wstring& filename)
 : BaseEffect(device, filename)
 {
     Tech = m_FX->GetTechniqueByName("Tech");
+    TechBlur = m_FX->GetTechniqueByName("TechBlur");
 
     WorldViewProj = m_FX->GetVariableByName("gWorldViewProj")->AsMatrix();
     World = m_FX->GetVariableByName("gWorld")->AsMatrix();

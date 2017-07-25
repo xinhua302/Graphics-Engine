@@ -77,9 +77,6 @@ void TreeSprite::Render()
 {
     Effects::TreeFX->SetDirLights(LightManager::Light);
     Effects::TreeFX->SetEysPosW(D3d->GetCamera().GetPosition());
-    Effects::TreeFX->SetFogColor(Colors::Silver);
-    Effects::TreeFX->SetFogStart(15.0f);
-    Effects::TreeFX->SetFogRange(100.0f);
     XMMATRIX view = D3d->GetCamera().View();
     XMMATRIX proj = D3d->GetCamera().Proj();
     XMMATRIX viewProj = view * proj;

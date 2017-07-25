@@ -18,7 +18,7 @@ D3dApp* D3dApp::GetInstance()
 D3dApp::D3dApp(HWND hwnd)
 :				m_DriverType(D3D_DRIVER_TYPE_HARDWARE),
 				m_Hwnd(hwnd),
-                m_Enable4xMsaa(true),
+                m_Enable4xMsaa(false),
                 m_4xMsaaQuality(0)
 {
 	ZeroMemory(&m_ScreenViewport, sizeof(D3D11_VIEWPORT));
@@ -285,8 +285,15 @@ bool D3dApp::Init()
     ObjectManager::CreateObject("Water");
     ObjectManager::CreateObject("BoxShadow");
 
-
     LightManager::CreateLight();
+
+    //设置雾效
+    Effects::FX->SetFogColor(Colors::Silver);
+    Effects::FX->SetFogStart(25.0f);
+    Effects::FX->SetFogRange(150.0f);
+    Effects::TreeFX->SetFogColor(Colors::Silver);
+    Effects::TreeFX->SetFogStart(25.0f);
+    Effects::TreeFX->SetFogRange(150.0f);
     return true;
 }
 
@@ -312,9 +319,8 @@ bool D3dApp::Render()
 {
     ID3D11RenderTargetView* renderTargetView = BlurFilter::OffscreenRTV;
     //请屏
-    float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
     m_pImmediateContext->OMSetRenderTargets(1, &renderTargetView, m_pDepthStencilView);
-    m_pImmediateContext->ClearRenderTargetView(renderTargetView, color);
+    m_pImmediateContext->ClearRenderTargetView(renderTargetView, reinterpret_cast<const float*>(&Colors::White));
     m_pImmediateContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
     //设置输入布局和拓扑结构
@@ -326,11 +332,6 @@ bool D3dApp::Render()
 
     //设置光照
     LightManager::Apply();
-
-	//设置雾效
-	Effects::FX->SetFogColor(Colors::Silver);
-	Effects::FX->SetFogStart(15.0f);
-	Effects::FX->SetFogRange(100.0f);
 
     //渲染对象
     ObjectManager::Render();
