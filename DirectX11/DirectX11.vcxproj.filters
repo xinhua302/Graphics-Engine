@@ -132,5 +132,8 @@
     <CustomBuild Include="Resource\FX\TreeSprite.fx">
       <Filter>Resource\FX</Filter>
     </CustomBuild>
+    <CustomBuild Include="Resource\FX\Blur.fx">
+      <Filter>Resource\FX</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

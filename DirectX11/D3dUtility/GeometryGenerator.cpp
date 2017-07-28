@@ -81,11 +81,10 @@ void GeometryGenerator::CreateGrid(MeshData &meshData, float width, float depth,
     }
 }
 
-void GeometryGenerator::CreateFullscreenQuad(MeshData& meshData)
+void GeometryGenerator::CreateFullscreenQuad(MeshData& meshData, float unit)
 {
     meshData.Vertices.resize(4);
     meshData.Indices.resize(6);
-    float unit = 1.0f;
     meshData.Vertices[0] = Vertex(
         -unit, -unit, 0.0f,
         0.0f, 0.0f, -1.0f,

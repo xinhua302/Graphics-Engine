@@ -335,6 +335,10 @@ bool D3dApp::Render()
 
     //äÖÈ¾¶ÔÏó
     ObjectManager::Render();
+    m_pImmediateContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
+    m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, reinterpret_cast<const float*>(&Colors::White));
+    m_pImmediateContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+    ObjectManager::Render();
 
     BlurFilter::RenderToTexture(m_pRenderTargetView, m_pDepthStencilView);
 
