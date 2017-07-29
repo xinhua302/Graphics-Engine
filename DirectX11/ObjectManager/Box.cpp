@@ -177,7 +177,7 @@ void Box::Render()
         }
 		else if (m_Mode == 2)
 		{
-			D3d->GetContext()->OMSetDepthStencilState(RenderStates::NoDoubleBlendDSS, 1);
+			D3d->GetContext()->OMSetDepthStencilState(RenderStates::NoDoubleBlendDSS, 2);
 			D3d->GetContext()->OMSetBlendState(RenderStates::TransparentBS, blendFactor, 0xffffffff);
 			XMVECTOR shadowPlane = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 			XMVECTOR shadowLight = -XMLoadFloat3(&oldLightDirections[1]);
